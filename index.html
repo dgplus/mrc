@@ -98,6 +98,7 @@
       style: 'mapbox://styles/mapbox/light-v10', // YOUR TURN: choose a style: https://docs.mapbox.com/api/maps/#styles
       center: [-91.753,38.485], // starting position [lng, lat]
       zoom: 4, // starting zoom
+      projection: 'globe',
       transformRequest: transformRequest
     });
 
@@ -131,8 +132,15 @@
                 'data': data
               },
               'paint': {
-                'circle-radius': 5,
+                'circle-radius': [
+        'interpolate',
+        ['linear'],
+        ['zoom'],
+        10, 8,
+        13, 4
+      ],
                 'circle-color': "#FAAD7D"
+                'circle-stroke-color': "#F37325"
               }
             });
 
