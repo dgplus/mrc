@@ -108,15 +108,14 @@
         //YOUR TURN: Replace with csv export link
         url: 'https://docs.google.com/spreadsheets/d/1MLeAHaf9pMzO7gTF6cCcUAiMMJhQHRot9g4ZD7IenPM/gviz/tq?tqx=out:csv&sheet=Clients',
         dataType: "text",
-        success: function(csvData) {
-          makeGeoJSON(csvData);
+        success: function(Clients) {
+          makeGeoJSON(Clients);
         }
       });
 
 
-
-      function makeGeoJSON(csvData) {
-        csv2geojson.csv2geojson(csvData, {
+      function makeGeoJSON(Clients) {
+        csv2geojson.csv2geojson(Clients, {
           latfield: 'lat',
           lonfield: 'lon',
           delimiter: ','
@@ -125,7 +124,7 @@
 
             //Add the the layer to the map
             map.addLayer({
-              'id': 'csvData',
+              'id': 'Clients',
               'type': 'circle',
               'source': {
                 'type': 'geojson',
@@ -147,7 +146,7 @@
 
             // When a click event occurs on a feature in the csvData layer, open a popup at the
             // location of the feature, with description HTML from its properties.
-            map.on('click', 'csvData', function(e) {
+            map.on('click', 'Clients', function(e) {
               var coordinates = e.features[0].geometry.coordinates.slice();
 
               //set popup text
@@ -172,7 +171,7 @@
             });
 
             // Change the cursor to a pointer when the mouse is over the places layer.
-            map.on('mouseenter', 'csvData', function() {
+            map.on('mouseenter', 'Clients', function() {
               map.getCanvas().style.cursor = 'pointer';
             });
 
