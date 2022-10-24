@@ -11,7 +11,7 @@
   <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
   <script src='https://npmcdn.com/csv2geojson@latest/csv2geojson.js'></script>
   <script src='https://npmcdn.com/@turf/turf/turf.min.js'></script>
-  <script type="module" src="https://unpkg.com/mapbox-choropleth"></script>
+  <!-- <script type="module" src="https://unpkg.com/mapbox-choropleth"></script> -->
   <style>
     body {
       margin: 0;
@@ -144,20 +144,20 @@
               }
             });
 
-      // import MapboxChoropleth from "mapbox-choropleth";
-      import MapboxChoropleth from 'mapbox-choropleth';
-
-      let c = new MapboxChoropleth({
-          tableUrl: 'https://docs.google.com/spreadsheets/d/1AqtGFmMM6GbuszvExocNkG0bLHnXyDOv4VHBM0OZ_N0/gviz/tq?tqx=out:csv&sheet=CommunitySolarCapacity',
-          tableNumericField: '2022_Commu_Solar',
-          tableIdField: 'State',
-          geometryUrl: 'mapbox://dgplusdesign.cl9hc6d0e3nvr21odx88kv4pe-05494',
-          geometryIdField: 'NAME',
-          sourceLayer: 'StatesBoundaries',
-          binCount: 10,
-          colorScheme: 'Spectral',
-          legendElement: '#legend'
-       }).addTo(map);
+      // // import MapboxChoropleth from "mapbox-choropleth";
+      // import MapboxChoropleth from 'mapbox-choropleth';
+      //
+      // let c = new MapboxChoropleth({
+      //     tableUrl: 'https://docs.google.com/spreadsheets/d/1AqtGFmMM6GbuszvExocNkG0bLHnXyDOv4VHBM0OZ_N0/gviz/tq?tqx=out:csv&sheet=CommunitySolarCapacity',
+      //     tableNumericField: '2022_Commu_Solar',
+      //     tableIdField: 'State',
+      //     geometryUrl: 'mapbox://dgplusdesign.cl9hc6d0e3nvr21odx88kv4pe-05494',
+      //     geometryIdField: 'NAME',
+      //     sourceLayer: 'StatesBoundaries',
+      //     binCount: 10,
+      //     colorScheme: 'Spectral',
+      //     legendElement: '#legend'
+      //  }).addTo(map);
 
 
             // When a click event occurs on a feature in the csvData layer, open a popup at the
