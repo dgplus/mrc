@@ -12,6 +12,9 @@
   <script src='https://npmcdn.com/csv2geojson@latest/csv2geojson.js'></script>
   <script src='https://npmcdn.com/@turf/turf/turf.min.js'></script>
   <script src="https://unpkg.com/mapbox-choropleth"></script>
+  <script src="https://requirejs.org/docs/release/2.3.5/minified/require.js"></script>
+
+  </script>
   <style>
     body {
       margin: 0;
@@ -87,8 +90,7 @@
         url.slice(10, 26) === "tiles.mapbox.com";
       return {
         url: isMapboxRequest ?
-          url.replace("?", "?pluginName=sheetMapper&") :
-          url
+          url.replace("?", "?pluginName=sheetMapper&") : url
       };
     };
     //YOUR TURN: add your Mapbox token
@@ -97,7 +99,7 @@
     var map = new mapboxgl.Map({
       container: 'map', // container id
       style: 'mapbox://styles/dgplusdesign/cl9hc525r000g14mmv6z8d3ss', // YOUR TURN: choose a style: https://docs.mapbox.com/api/maps/#styles
-      center: [-91.753,38.485], // starting position [lng, lat]
+      center: [-91.753, 38.485], // starting position [lng, lat]
       zoom: 4, // starting zoom
       projection: 'globe',
       transformRequest: transformRequest
@@ -133,31 +135,31 @@
               },
               'paint': {
                 'circle-radius': [
-        'interpolate',
-        ['linear'],
-        ['zoom'],
-        10, 8,
-        13, 4
-      ],
+                  'interpolate',
+                  ['linear'],
+                  ['zoom'],
+                  10, 8,
+                  13, 4
+                ],
                 'circle-color': "#FAAD7D",
-                'circle-stroke-width': .2,
+                'circle-stroke-width': 1,
                 'circle-stroke-color': "#F37325"
               }
             });
 
             const MapboxChoropleth = require('mapbox-choropleth');
-  let c = new MapboxChoropleth({
-  tableUrl: 'https://docs.google.com/spreadsheets/d/1AqtGFmMM6GbuszvExocNkG0bLHnXyDOv4VHBM0OZ_N0/gviz/tq?tqx=out:csv&sheet=CommSolarCap',
-  tableNumericField: '2022Cap',
-  tableIdField: 'State',
-  geometryUrl: 'https://studio.mapbox.com/tilesets/dgplusdesign.cl9hc6d0e3nvr21odx88kv4pe-05494',
-  geometryIdField: 'NAME',
-  sourceLayer: 'StatesBoundaries',
-  binCount: 10,
-  colorScheme: 'Spectral',
-  legendElement: '#legend',
-  before: 'Clients'
-  }).addTo(map);
+            let c = new MapboxChoropleth({
+              tableUrl: 'https://docs.google.com/spreadsheets/d/1AqtGFmMM6GbuszvExocNkG0bLHnXyDOv4VHBM0OZ_N0/gviz/tq?tqx=out:csv&sheet=CommSolarCap',
+              tableNumericField: '2022Cap',
+              tableIdField: 'State',
+              geometryUrl: 'https://studio.mapbox.com/tilesets/dgplusdesign.cl9hc6d0e3nvr21odx88kv4pe-05494',
+              geometryIdField: 'NAME',
+              sourceLayer: 'StatesBoundaries',
+              binCount: 10,
+              colorScheme: 'Spectral',
+              legendElement: '#legend',
+              before: 'Clients'
+            }).addTo(map);
 
 
             // When a click event occurs on a feature in the csvData layer, open a popup at the
@@ -168,7 +170,8 @@
               //set popup text
               //You can adjust the values of the popup to match the headers of your CSV.
               // For example: e.features[0].properties.Name is retrieving information from the field Name in the original CSV.
-              var description = `<h3>` + e.features[0].properties.Client + `</h3>` + `<h4>` + `<b>` + `Description: ` + `</b>` + e.features[0].properties.Description + `</h4>` + `<h4>` + `<b>` + `Time with DG+: ` + `</b>` + e.features[0].properties
+              var description = `<h3>` + e.features[0].properties.Client + `</h3>` + `<h4>` + `<b>` + `Description: ` + `</b>` + e.features[0].properties.Description + `</h4>` + `<h4>` + `<b>` + `Time with DG+: ` + `</b>` + e
+                .features[0].properties
                 .TimewDG + `</h4>`;
 
               // Ensure that if the map is zoomed out such that multiple
