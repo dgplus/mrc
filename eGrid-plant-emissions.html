@@ -79,25 +79,28 @@
 
   <div id='map'></div>
   <script>
-
     var transformRequest = (url, resourceType) => {
       var isMapboxRequest =
         url.slice(8, 22) === "api.mapbox.com" ||
         url.slice(10, 26) === "tiles.mapbox.com";
       return {
-        url: isMapboxRequest
-          ? url.replace("?", "?pluginName=sheetMapper&")
-          : url
+        url: isMapboxRequest ?
+          url.replace("?", "?pluginName=sheetMapper&") :
+          url
       };
     };
     //YOUR TURN: add your Mapbox token
-    
-    mapboxgl.accessToken = 'pk.eyJ1IjoiZGdwbHVzZGVzaWduIiwiYSI6ImNsZTF2bmZnbzBoeGkzb28yOW5kemF0ZHEifQ.wcLBXkbgle9WkYCnzSM8Cw'; //Mapbox token 
+
+    mapboxgl.accessToken =
+      'pk.eyJ1IjoiZGdwbHVzZGVzaWduIiwiYSI6ImNsZTF2bmZnbzBoeGkzb28yOW5kemF0ZHEifQ.wcLBXkbgle9WkYCnzSM8Cw'; //Mapbox token 
     var map = new mapboxgl.Map({
       container: 'map', // container id
       style: 'mapbox://styles/mapbox/light-v11', // YOUR TURN: choose a style: https://docs.mapbox.com/api/maps/#styles
-      center: { lng: -99.48299257741193, lat: 40.92230044374887 }, // starting position [lng, lat]
-      zoom: 3.5,// starting zoom
+      center: {
+        lng: -99.48299257741193,
+        lat: 40.92230044374887
+      }, // starting position [lng, lat]
+      zoom: 3.5, // starting zoom
       transformRequest: transformRequest
     });
 
@@ -107,7 +110,9 @@
         //YOUR TURN: Replace with csv export link
         url: 'https://docs.google.com/spreadsheets/d/101yN0aA_DVGEstbFfaHtjgKaNneMGSsx/gviz/tq?tqx=out:csv&sheet=Sheet2',
         dataType: "text",
-        success: function (csvData) { makeGeoJSON(csvData); }
+        success: function (csvData) {
+          makeGeoJSON(csvData);
+        }
       });
 
 
@@ -130,126 +135,128 @@
               },
               'paint': {
                 'circle-radius': [
-  "interpolate",
-  ["linear"],
-  ["zoom"],
-  0,
-  [
-    "interpolate",
-    ["exponential", 1],
-    ["get", "PLCO2AN"],
-    0,
-    2,
-    5741329,
-    5,
-    11482658,
-    8,
-    17223987,
-    12,
-    22965315.15,
-    20
-  ],
-  5,
-  [
-    "interpolate",
-    ["exponential", 1],
-    ["get", "PLCO2AN"],
-    0,
-    2,
-    5741329,
-    5,
-    11482658,
-    8,
-    17223987,
-    12,
-    22965315.15,
-    20
-  ],
-  10,
-  [
-    "interpolate",
-    ["exponential", 1],
-    ["get", "PLCO2AN"],
-    0,
-    2,
-    2870665,
-    4,
-    5741329,
-    5,
-    11482658,
-    8,
-    17223987,
-    12,
-    22965315.15,
-    20
-  ],
-  22,
-  [
-    "interpolate",
-    ["linear"],
-    ["get", "PLCO2AN"],
-    0,
-    2,
-    292720,
-    3,
-    5741329,
-    4,
-    8611994,
-    5,
-    11482658,
-    8,
-    17223987,
-    12,
-    22965315.15,
-    20
-  ]
-],
+                  "interpolate",
+                  ["linear"],
+                  ["zoom"],
+                  0,
+                  [
+                    "interpolate",
+                    ["exponential", 1],
+                    ["get", "PLCO2AN"],
+                    0,
+                    2,
+                    5741329,
+                    5,
+                    11482658,
+                    8,
+                    17223987,
+                    12,
+                    22965315.15,
+                    20
+                  ],
+                  5,
+                  [
+                    "interpolate",
+                    ["exponential", 1],
+                    ["get", "PLCO2AN"],
+                    0,
+                    2,
+                    5741329,
+                    5,
+                    11482658,
+                    8,
+                    17223987,
+                    12,
+                    22965315.15,
+                    20
+                  ],
+                  10,
+                  [
+                    "interpolate",
+                    ["exponential", 1],
+                    ["get", "PLCO2AN"],
+                    0,
+                    2,
+                    2870665,
+                    4,
+                    5741329,
+                    5,
+                    11482658,
+                    8,
+                    17223987,
+                    12,
+                    22965315.15,
+                    20
+                  ],
+                  22,
+                  [
+                    "interpolate",
+                    ["linear"],
+                    ["get", "PLCO2AN"],
+                    0,
+                    2,
+                    292720,
+                    3,
+                    5741329,
+                    4,
+                    8611994,
+                    5,
+                    11482658,
+                    8,
+                    17223987,
+                    12,
+                    22965315.15,
+                    20
+                  ]
+                ],
                 'circle-color': [
-                                  "match",
-                                  ["get", "PLFUELCT"],
-                                    ["OIL"],
-                                      "#b21fc8",
-                                    ["HYDRO"],
-                                      "#71e5f5",
-                                    ["SOLAR"],
-                                      "#f4e158",
-                                    ["BIOMASS"],
-                                      "#00d41e",
-                                    ["WIND"],
-                                      "#679bfa",
-                                    ["COAL"],
-                                      "#705747",
-                                    ["GAS"],
-                                     "#a8a8a8",
-                                    ["GEOTHERMAL"],
-                                     "#512ad1",
-                                    ["NUCLEAR"],
-                                     "#db75fa",
-                                     "#000000"],
+                  "match",
+                  ["get", "PLFUELCT"],
+                  ["OIL"],
+                  "#b21fc8",
+                  ["HYDRO"],
+                  "#71e5f5",
+                  ["SOLAR"],
+                  "#f4e158",
+                  ["BIOMASS"],
+                  "#00d41e",
+                  ["WIND"],
+                  "#679bfa",
+                  ["COAL"],
+                  "#705747",
+                  ["GAS"],
+                  "#a8a8a8",
+                  ["GEOTHERMAL"],
+                  "#512ad1",
+                  ["NUCLEAR"],
+                  "#db75fa",
+                  "#000000"
+                ],
                 'circle-opacity': 0.7,
                 'circle-stroke-color': [
-                                          "match",
-                                          ["get", "PLFUELCT"],
-                                    ["OIL"],
-                                      "#b21fc8",
-                                    ["HYDRO"],
-                                      "#71e5f5",
-                                    ["SOLAR"],
-                                      "#f4e158",
-                                    ["BIOMASS"],
-                                      "#00d41e",
-                                    ["WIND"],
-                                      "#679bfa",
-                                    ["COAL"],
-                                      "#705747",
-                                    ["GAS"],
-                                     "#a8a8a8",
-                                    ["GEOTHERMAL"],
-                                     "#512ad1",
-                                    ["NUCLEAR"],
-                                     "#db75fa",
-                                     "#000000"],
-                  'circle-stroke-width': 0.75
+                  "match",
+                  ["get", "PLFUELCT"],
+                  ["OIL"],
+                  "#b21fc8",
+                  ["HYDRO"],
+                  "#71e5f5",
+                  ["SOLAR"],
+                  "#f4e158",
+                  ["BIOMASS"],
+                  "#00d41e",
+                  ["WIND"],
+                  "#679bfa",
+                  ["COAL"],
+                  "#705747",
+                  ["GAS"],
+                  "#a8a8a8",
+                  ["GEOTHERMAL"],
+                  "#512ad1",
+                  ["NUCLEAR"],
+                  "#db75fa",
+                  "#000000"
+                ],
+                'circle-stroke-width': 0.75
               }
             });
 
@@ -262,7 +269,10 @@
               //set popup text
               //You can adjust the values of the popup to match the headers of your CSV.
               // For example: e.features[0].properties.Name is retrieving information from the field Name in the original CSV.
-              var description = `<h3>` + e.features[0].properties.PNAME + `</h3>` + `<h4>` + `<b>` + `Fuel Type: ` + `</b>` + e.features[0].properties.PLFUELCT + `</h4>` + `<h4>` + `<b>` + `Annual CO2 Emissions: ` + `</b>` + e.features[0].properties.PLCO2AN + ` tons` + `</h4>`;
+              var description = `<h3>` + e.features[0].properties.PNAME + `</h3>` + `<h4>` + `<b>` +
+                `Fuel Type: ` + `</b>` + e.features[0].properties.PLFUELCT + `</h4>` + `<h4>` + `<b>` +
+                `Annual CO2 Emissions: ` + `</b>` + e.features[0].properties.PLCO2AN + ` tons` +
+                `</h4>`;
 
               // Ensure that if the map is zoomed out such that multiple
               // copies of the feature are visible, the popup appears
@@ -290,17 +300,15 @@
             });
 
             var bbox = turf.bbox(data);
-            map.fitBounds(bbox, { padding: 50 });
+            map.fitBounds(bbox, {
+              padding: 50
+            });
 
           });
 
         });
       };
     });
-
-
-
-
   </script>
 
 </body>
