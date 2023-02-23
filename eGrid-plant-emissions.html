@@ -120,7 +120,8 @@
         csv2geojson.csv2geojson(csvData, {
           latfield: 'LAT',
           lonfield: 'LON',
-          delimiter: ','
+          delimiter: ',',
+          numericFields: ['MW', 'CARB', 'CARBRT'],
         }, function (err, data) {
           map.on('load', function () {
 
