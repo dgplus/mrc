@@ -139,8 +139,8 @@
                   ["linear"],
                   ["zoom"],
                   0,
-                  [
-                    "interpolate",
+                  ["*", 
+                    ["interpolate",
                     ["exponential", 1],
                     ["get", "PLCO2AN"],
                     0,
@@ -152,11 +152,10 @@
                     17223987,
                     12,
                     22965315.15,
-                    20
-                  ],
+                    20], 1],
                   5,
-                  [
-                    "interpolate",
+                  ["*",
+                    ["interpolate",
                     ["exponential", 1],
                     ["get", "PLCO2AN"],
                     0,
@@ -168,11 +167,10 @@
                     17223987,
                     12,
                     22965315.15,
-                    20
-                  ],
+                    20], 1.1],
                   10,
-                  [
-                    "interpolate",
+                  ["*",
+                    ["interpolate",
                     ["exponential", 1],
                     ["get", "PLCO2AN"],
                     0,
@@ -186,11 +184,10 @@
                     17223987,
                     12,
                     22965315.15,
-                    20
-                  ],
+                    20], 1.4],
                   22,
-                  [
-                    "interpolate",
+                  ["*",
+                    ["interpolate",
                     ["linear"],
                     ["get", "PLCO2AN"],
                     0,
@@ -206,8 +203,7 @@
                     17223987,
                     12,
                     22965315.15,
-                    20
-                  ]
+                    20], 2]
                 ],
                 'circle-color': [
                   "match",
