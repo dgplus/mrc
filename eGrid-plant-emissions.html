@@ -100,7 +100,7 @@
         lat: 40.92230044374887
       }, // starting position [lng, lat]
       zoom: 3.5, // starting zoom
-      minZoom: 2.5,
+      minZoom: 2.2,
       transformRequest: transformRequest
     });
 
@@ -271,6 +271,8 @@
               //You can adjust the values of the popup to match the headers of your CSV.
               // For example: e.features[0].properties.Name is retrieving information from the field Name in the original CSV.
               var description = `<h3>` + e.features[0].properties.NAME + `</h3>` + `<h4>` + `<b>` +
+                `State: ` + `</b>` + e.features[0].properties.STATE + `</h4>` + `<h4>` + `<b>` +
+                `County: ` + `</b>` + e.features[0].properties.COUNTY + `</h4>` + `<h4>` + `<b>` +
                 `Fuel Type: ` + `</b>` + e.features[0].properties.TYPE + `</h4>` + `<h4>` + `<b>` +
                 `Annual CO2 Emissions: ` + `</b>` + e.features[0].properties.CARB + ` tons` +
                 `</h4>`;
