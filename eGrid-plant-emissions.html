@@ -125,6 +125,8 @@
         }, function (err, data) {
           map.on('load', function () {
 
+            buildOwnershipFilters(data)
+
             //Add the the layer to the map
             map.addLayer({
               'id': 'csvData',
@@ -331,7 +333,7 @@
               input.addEventListener('input', (e) => {
                 console.log('input', input.checked);
                 data.filters.has(d) ? data.filters.delete(d) : data.filters.add(d)
-                map.setFilter(csvData, ["in", "TYPE", ...data.filters]);
+                map.setFilter(data, ["in", "TYPE", ...data.filters]);
               })
 
               const label = document.createElement("label")
@@ -344,7 +346,7 @@
               // return div
             })
 
-            map.setFilter(csvData, ["in", "TYPE", ...data.filters]);
+            map.setFilter(data, ["in", "TYPE", ...data.filters]);
           }
 
         });
