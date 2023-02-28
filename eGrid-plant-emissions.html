@@ -10,8 +10,69 @@
   <link href='https://api.mapbox.com/mapbox-gl-js/v2.0.1/mapbox-gl.css' rel='stylesheet' />
   <script src='https://npmcdn.com/csv2geojson@latest/csv2geojson.js'></script>
   <script src='https://npmcdn.com/@turf/turf/turf.min.js'></script>
-  <script src="https://d3js.org/d3.v7.min.js"></script>
-  <link href="https://dgplus.github.io/maps/css/map-styles.css" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
+    #map {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 100%;
+    }
+
+    /* Popup styling */
+
+    .mapboxgl-popup {
+      padding-bottom: 5px;
+    }
+
+    .mapboxgl-popup-close-button {
+      display: none;
+    }
+
+    .mapboxgl-popup-content {
+      font: 400 15px/22px 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
+      padding: 0;
+      width: 250px;
+    }
+
+    .mapboxgl-popup-content-wrapper {
+      padding: 1%;
+    }
+
+    .mapboxgl-popup-content h3 {
+      background: rgb(61, 59, 59);
+      text-align: center;
+      color: #fff;
+      margin: 0;
+      display: block;
+      padding: 15px;
+      font-weight: 700;
+      margin-top: -5px;
+    }
+
+    .mapboxgl-popup-content h4 {
+      margin: 0;
+      display: block;
+      padding: 10px 3px 10px 10px;
+      font-weight: 400;
+    }
+
+    .mapboxgl-container {
+      cursor: pointer;
+    }
+
+    .mapboxgl-popup-anchor-top>.mapboxgl-popup-content {
+      margin-top: 3px;
+    }
+
+    .mapboxgl-popup-anchor-top>.mapboxgl-popup-tip {
+      border-bottom-color: rgb(61, 59, 59);
+    }
+  </style>
 </head>
 
 <body>
@@ -28,6 +89,7 @@
       };
     };
     //YOUR TURN: add your Mapbox token
+
     mapboxgl.accessToken =
       'pk.eyJ1IjoiZGdwbHVzZGVzaWduIiwiYSI6ImNsZTF2bmZnbzBoeGkzb28yOW5kemF0ZHEifQ.wcLBXkbgle9WkYCnzSM8Cw'; //Mapbox token 
     var map = new mapboxgl.Map({
@@ -63,8 +125,6 @@
           numericFields: 'MW,CARB,CARBRT',
         }, function (err, data) {
           map.on('load', function () {
-
-            buildOwnershipFilters(data)
 
             //Add the the layer to the map
             map.addLayer({
@@ -210,14 +270,12 @@
               //set popup text
               //You can adjust the values of the popup to match the headers of your CSV.
               // For example: e.features[0].properties.Name is retrieving information from the field Name in the original CSV.
-              var description =
-                `<h3>` + e.features[0].properties.NAME + `</h3>` +
-                `<h4>` + `<b>` + `Location: ` + `</b>` + e.features[0].properties.COUNTY + ` County` +
-                `, ` + e.features[0].properties.STATE + `</h4>` +
-                `<h4>` + `<b>` + `Fuel Type: ` + `</b>` + e.features[0].properties.TYPE + `</h4>` +
-                `<h4>` + `<b>` + `Utility: ` + `</b>` + e.features[0].properties.UTIL + `</h4>` +
-                `<h4>` + `<b>` + `Annual CO2 Emissions: ` + `</b>` + e.features[0].properties.CARB +
-                ` tons` + `</h4>`;
+              var description = 
+              `<h3>` + e.features[0].properties.NAME + `</h3>` + 
+              `<h4>` + `<b>` + `Location: ` + `</b>` + e.features[0].properties.COUNTY + ` County` + `, ` + e.features[0].properties.STATE + `</h4>` + 
+              `<h4>` + `<b>` + `Fuel Type: ` + `</b>` + e.features[0].properties.TYPE + `</h4>` + 
+              `<h4>` + `<b>` + `Utility: ` + `</b>` + e.features[0].properties.UTIL + `</h4>` + 
+              `<h4>` + `<b>` + `Annual CO2 Emissions: ` + `</b>` + e.features[0].properties.CARB + ` tons` + `</h4>`;
 
               // Ensure that if the map is zoomed out such that multiple
               // copies of the feature are visible, the popup appears
@@ -250,43 +308,6 @@
             });
 
           });
-
-          function buildOwnershipFilters(data) {
-
-            const uniqueNames = [...new Set(data.Map(d => d.TYPE.toUpperCase()).filter(d => d !== ""))]
-
-            uniqueNames.forEach(d => {
-
-              const div = document.createElement("div")
-              div.className = "checkbox-container"
-              const input = document.createElement("input")
-              input.type = "checkbox"
-              input.className = "checkbox"
-              input.id = d
-              if (d === "GAS") {
-                data.filters.add(d)
-                input.checked = true
-              } else {
-                input.checked = false
-              }
-              input.addEventListener('input', (e) => {
-                console.log('input', input.checked);
-                data.filters.has(d) ? data.filters.delete(d) : data.filters.add(d)
-                map.setFilter(data, ["in", "TYPE", ...data.filters]);
-              })
-
-              const label = document.createElement("label")
-              label.htmlFor = d
-              label.innerText = d
-
-              div.appendChild(input)
-              div.appendChild(label)
-              filtersDiv.appendChild(div)
-              // return div
-            })
-
-            map.setFilter(data, ["in", "TYPE", ...data.filters]);
-          }
 
         });
       };
