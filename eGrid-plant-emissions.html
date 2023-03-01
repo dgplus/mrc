@@ -21,48 +21,40 @@
       <div class="map-overlay-inner">
         <h3>CO2 Emissions of Power Plants in the US</h3>
         <div id='checkboxes'>
-          <input type="checkbox" name="BIOMASS" value="BIOMASS"
-            onchange="filterPowerPlants('BIOMASS');"> <label for="BIOMASS">
+          <input type="checkbox" name="BIOMASS" value="BIOMASS" onchange="filterPowerPlants('BIOMASS');"> <label
+            for="BIOMASS">
             Biomass </label>
 
-          <input type="checkbox" name="COAL" value="COAL"
-            onchange="filterPowerPlants('COAL');"> <label for="COAL"> Coal
+          <input type="checkbox" name="COAL" value="COAL" onchange="filterPowerPlants('COAL');"> <label for="COAL"> Coal
           </label>
 
-          <input type="checkbox" name="GAS" value="GAS"
-            onchange="filterPowerPlants('GAS');"> <label for="GAS"> Gas
+          <input type="checkbox" name="GAS" value="GAS" onchange="filterPowerPlants('GAS');"> <label for="GAS"> Gas
           </label>
 
-          <input type="checkbox" name="GEOTHERMAL" value="GEOTHERMAL"
-            onchange="filterPowerPlants('GEOTHERMAL');"> <label for="GEOTHERMAL">
+          <input type="checkbox" name="GEOTHERMAL" value="GEOTHERMAL" onchange="filterPowerPlants('GEOTHERMAL');">
+          <label for="GEOTHERMAL">
             Geothermal </label>
 
-          <input type="checkbox" name="HYDRO" value="HYDRO"
-            onchange="filterPowerPlants('HYDRO');"> <label for="HYDRO">
+          <input type="checkbox" name="HYDRO" value="HYDRO" onchange="filterPowerPlants('HYDRO');"> <label for="HYDRO">
             Hydro </label>
 
-          <input type="checkbox" name="NUCLEAR" value="NUCLEAR"
-            onchange="filterPowerPlants('NUCLEAR');"> <label for="NUCLEAR">
+          <input type="checkbox" name="NUCLEAR" value="NUCLEAR" onchange="filterPowerPlants('NUCLEAR');"> <label
+            for="NUCLEAR">
             Nuclear </label>
 
-          <input type="checkbox" name="SOLAR" value="SOLAR"
-            onchange="filterPowerPlants('SOLAR');"> <label for="SOLAR">
+          <input type="checkbox" name="SOLAR" value="SOLAR" onchange="filterPowerPlants('SOLAR');"> <label for="SOLAR">
             Solar </label>
 
-          <input type="checkbox" name="WIND" value="WIND"
-            onchange="filterPowerPlants('WIND');"> <label for="WIND"> Wind
+          <input type="checkbox" name="WIND" value="WIND" onchange="filterPowerPlants('WIND');"> <label for="WIND"> Wind
           </label>
 
-          <input type="checkbox" name="OFSL" value="OFSL"
-            onchange="filterPowerPlants('OFSL');"> <label for="OFSL">
+          <input type="checkbox" name="OFSL" value="OFSL" onchange="filterPowerPlants('OFSL');"> <label for="OFSL">
             Energy Storage </label>
 
-          <input type="checkbox" name="OIL" value="OIL"
-            onchange="filterPowerPlants('OIL');"> <label for="OIL"> Oil
+          <input type="checkbox" name="OIL" value="OIL" onchange="filterPowerPlants('OIL');"> <label for="OIL"> Oil
           </label>
 
-          <input type="checkbox" name="OTHF" value="OTHF"
-            onchange="filterPowerPlants('OTHF');"> <label for="OTHF"> OTHF
+          <input type="checkbox" name="OTHF" value="OTHF" onchange="filterPowerPlants('OTHF');"> <label for="OTHF"> OTHF
           </label>
         </div>
       </div>
@@ -117,6 +109,16 @@
         }, function (err, data) {
           map.on('load', function () {
 
+            function filterPowerPlants(type) {
+              var filteredData = data.features.filter(function (feature) {
+                return feature.properties.TYPE == type && document.getElementsByName(type)[0].checked;
+              });
+              var newData = {
+                "type": "FeatureCollection",
+                "features": filteredData
+              };
+              map.getSource('data').setData(newData);
+            }
 
             //Add the the layer to the map
             map.addLayer({
@@ -252,17 +254,6 @@
                 'circle-stroke-width': 0.75
               }
             });
-
-            function filterPowerPlants(type) {
-              var filteredData = data.features.filter(function (feature) {
-                return feature.properties.TYPE == type && document.getElementsByName(type)[0].checked;
-              });
-              var newData = {
-                "type": "FeatureCollection",
-                "features": filteredData
-              };
-              map.getSource('data').setData(newData);
-            }
 
             // When a click event occurs on a feature in the csvData layer, open a popup at the
             // location of the feature, with description HTML from its properties.
