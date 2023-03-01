@@ -254,7 +254,7 @@ const fullscreen = document.getElementById('fullscreen');
               }
             });
 
-            function filterPowerPlants(type) {
+            function filterPowerPlants(TYPE) {
               // Get all of the power plant markers on the map
               const powerPlantMarkers = map.querySourceFeatures('csvData', {
                 sourceLayer: 'csvData'
@@ -266,7 +266,7 @@ const fullscreen = document.getElementById('fullscreen');
                 const plantType = marker.properties.TYPE;
 
                 // If the marker has the requested type, show it on the map
-                if (plantType === type || !type) {
+                if (plantType === TYPE || !TYPE) {
                   map.setFeatureState(marker, {
                     hidden: false
                   });
