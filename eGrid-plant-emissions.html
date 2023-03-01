@@ -15,54 +15,64 @@
 
 <body>
 
-  <div id='map'></div>
-  <div id='checkboxes'>
-    <input type="checkbox" name="biomass" value="BIOMASS"
-      onchange="filterPowerPlants('BIOMASS'); map.getSource('csvDATA').setData('csvDATA');">
-    <label for="biomass"> Biomass </label>
+  <div id="mapcontainer">
+    <div id="map"></div>
+    <div class="map-overlay top">
+      <div class="map-overlay-inner">
+        <h3>CO2 Emissions of Power Plants in the US</h3>
+        <div id='checkboxes'>
+          <input type="checkbox" name="biomass" value="BIOMASS"
+            onchange="filterPowerPlants('BIOMASS'); map.getSource('csvDATA').setData('csvDATA');">
+          <label for="biomass"> Biomass </label>
 
-    <input type="checkbox" name="coal" value="COAL"
-      onchange="filterPowerPlants('COAL'); map.getSource('csvDATA').setData('csvDATA');">
-    <label for="coal"> Coal </label>
+          <input type="checkbox" name="coal" value="COAL"
+            onchange="filterPowerPlants('COAL'); map.getSource('csvDATA').setData('csvDATA');">
+          <label for="coal"> Coal </label>
 
-    <input type="checkbox" name="gas" value="GAS"
-      onchange="filterPowerPlants('GAS'); map.getSource('csvDATA').setData('csvDATA');">
-    <label for="gas"> Gas </label>
+          <input type="checkbox" name="gas" value="GAS"
+            onchange="filterPowerPlants('GAS'); map.getSource('csvDATA').setData('csvDATA');">
+          <label for="gas"> Gas </label>
 
-    <input type="checkbox" name="geo" value="GEOTHERMAL"
-      onchange="filterPowerPlants('GEOTHERMAL'); map.getSource('csvDATA').setData('csvDATA');">
-    <label for="geo"> Geothermal </label>
+          <input type="checkbox" name="geo" value="GEOTHERMAL"
+            onchange="filterPowerPlants('GEOTHERMAL'); map.getSource('csvDATA').setData('csvDATA');">
+          <label for="geo"> Geothermal </label>
 
-    <input type="checkbox" name="hydro" value="HYDRO"
-      onchange="filterPowerPlants('HYDRO'); map.getSource('csvDATA').setData('csvDATA');">
-    <label for="hydro"> Hydro </label>
+          <input type="checkbox" name="hydro" value="HYDRO"
+            onchange="filterPowerPlants('HYDRO'); map.getSource('csvDATA').setData('csvDATA');">
+          <label for="hydro"> Hydro </label>
 
-    <input type="checkbox" name="nuclear" value="NUCLEAR"
-      onchange="filterPowerPlants('NUCLEAR'); map.getSource('csvDATA').setData('csvDATA');">
-    <label for="nuclear"> Nuclear </label>
+          <input type="checkbox" name="nuclear" value="NUCLEAR"
+            onchange="filterPowerPlants('NUCLEAR'); map.getSource('csvDATA').setData('csvDATA');">
+          <label for="nuclear"> Nuclear </label>
 
-    <input type="checkbox" name="solar" value="SOLAR"
-      onchange="filterPowerPlants('SOLAR'); map.getSource('csvDATA').setData('csvDATA');">
-    <label for="solar"> Solar </label>
+          <input type="checkbox" name="solar" value="SOLAR"
+            onchange="filterPowerPlants('SOLAR'); map.getSource('csvDATA').setData('csvDATA');">
+          <label for="solar"> Solar </label>
 
-    <input type="checkbox" name="wind" value="WIND"
-      onchange="filterPowerPlants('WIND'); map.getSource('csvDATA').setData('csvDATA');">
-    <label for="wind"> Wind </label>
+          <input type="checkbox" name="wind" value="WIND"
+            onchange="filterPowerPlants('WIND'); map.getSource('csvDATA').setData('csvDATA');">
+          <label for="wind"> Wind </label>
 
-    <input type="checkbox" name="storage" value="OFSL"
-      onchange="filterPowerPlants('OFSL'); map.getSource('csvDATA').setData('csvDATA');">
-    <label for="storage"> Energy Storage </label>
+          <input type="checkbox" name="storage" value="OFSL"
+            onchange="filterPowerPlants('OFSL'); map.getSource('csvDATA').setData('csvDATA');">
+          <label for="storage"> Energy Storage </label>
 
-    <input type="checkbox" name="oil" value="OIL"
-      onchange="filterPowerPlants('OIL'); map.getSource('csvDATA').setData('csvDATA');">
-    <label for="oil"> Oil </label>
+          <input type="checkbox" name="oil" value="OIL"
+            onchange="filterPowerPlants('OIL'); map.getSource('csvDATA').setData('csvDATA');">
+          <label for="oil"> Oil </label>
 
-    <input type="checkbox" name="othf" value="OTHF"
-      onchange="filterPowerPlants('OTHF'); map.getSource('csvDATA').setData('csvDATA');">
-    <label for="othf"> OTHF </label>
+          <input type="checkbox" name="othf" value="OTHF"
+            onchange="filterPowerPlants('OTHF'); map.getSource('csvDATA').setData('csvDATA');">
+          <label for="othf"> OTHF </label>
+        </div>
+      </div>
+    </div>
+    <div id="fullscreen">Full screen</div>
   </div>
-  
+
   <script>
+
+const fullscreen = document.getElementById('fullscreen');
     var transformRequest = (url, resourceType) => {
       var isMapboxRequest =
         url.slice(8, 22) === "api.mapbox.com" ||
@@ -107,11 +117,6 @@
           numericFields: 'MW,CARB,CARBRT',
         }, function (err, data) {
           map.on('load', function () {
-
-            const mapContainer = document.getElementById('map');
-            const checkboxes = document.getElementById('checkboxes');
-
-            mapContainer.appendChild(checkboxes);
 
 
             //Add the the layer to the map
@@ -325,6 +330,18 @@
 
           });
 
+          fullscreen.addEventListener('click', toggleFullscreen)
+
+        function toggleFullscreen() {
+            let elem = document.getElementById("mapcontainer");
+            if (!document.fullscreenElement) {
+                elem.requestFullscreen().catch((err) => {
+                    alert(`Error attempting to enable fullscreen mode: ${err.message} (${err.name})`);
+                });
+            } else {
+                document.exitFullscreen();
+            }
+        }
         });
       };
     });
