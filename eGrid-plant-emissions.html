@@ -254,14 +254,14 @@
             });
 
             function filterPowerPlants(type) {
-              var filteredData = csvData.features.filter(function (feature) {
+              var filteredData = data.features.filter(function (feature) {
                 return feature.properties.TYPE == type && document.getElementsByName(type)[0].checked;
               });
               var newData = {
                 "type": "FeatureCollection",
                 "features": filteredData
               };
-              map.getSource('csvDATA').setData(newData);
+              map.getSource('data').setData(newData);
             }
 
             // When a click event occurs on a feature in the csvData layer, open a popup at the
