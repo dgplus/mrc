@@ -61,6 +61,7 @@
       onchange="filterPowerPlants('OTHF'); map.getSource('csvDATA').setData('csvDATA');">
     <label for="othf"> OTHF </label>
   </div>
+  
   <script>
     var transformRequest = (url, resourceType) => {
       var isMapboxRequest =
@@ -106,6 +107,12 @@
           numericFields: 'MW,CARB,CARBRT',
         }, function (err, data) {
           map.on('load', function () {
+
+            const mapContainer = document.getElementById('map');
+            const checkboxes = document.getElementById('checkboxes');
+
+            mapContainer.appendChild(checkboxes);
+
 
             //Add the the layer to the map
             map.addLayer({
