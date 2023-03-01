@@ -22,37 +22,48 @@
         <h3>CO2 Emissions of Power Plants in the US</h3>
         <div id='checkboxes'>
           <input type="checkbox" name="biomass" value="BIOMASS"
-            onchange="filterPowerPlants('BIOMASS'); map.getSource('csvDATA').setData('csvDATA');"> <label for="biomass"> Biomass </label>
+            onchange="filterPowerPlants('BIOMASS');"> <label for="biomass">
+            Biomass </label>
 
           <input type="checkbox" name="coal" value="COAL"
-            onchange="filterPowerPlants('COAL'); map.getSource('csvDATA').setData('csvDATA');"> <label for="coal"> Coal </label>
+            onchange="filterPowerPlants('COAL');"> <label for="coal"> Coal
+          </label>
 
           <input type="checkbox" name="gas" value="GAS"
-            onchange="filterPowerPlants('GAS'); map.getSource('csvDATA').setData('csvDATA');"> <label for="gas"> Gas </label>
+            onchange="filterPowerPlants('GAS');"> <label for="gas"> Gas
+          </label>
 
           <input type="checkbox" name="geo" value="GEOTHERMAL"
-            onchange="filterPowerPlants('GEOTHERMAL'); map.getSource('csvDATA').setData('csvDATA');"> <label for="geo"> Geothermal </label>
+            onchange="filterPowerPlants('GEOTHERMAL');"> <label for="geo">
+            Geothermal </label>
 
           <input type="checkbox" name="hydro" value="HYDRO"
-            onchange="filterPowerPlants('HYDRO'); map.getSource('csvDATA').setData('csvDATA');"> <label for="hydro"> Hydro </label>
+            onchange="filterPowerPlants('HYDRO');"> <label for="hydro">
+            Hydro </label>
 
           <input type="checkbox" name="nuclear" value="NUCLEAR"
-            onchange="filterPowerPlants('NUCLEAR'); map.getSource('csvDATA').setData('csvDATA');"> <label for="nuclear"> Nuclear </label>
+            onchange="filterPowerPlants('NUCLEAR');"> <label for="nuclear">
+            Nuclear </label>
 
           <input type="checkbox" name="solar" value="SOLAR"
-            onchange="filterPowerPlants('SOLAR'); map.getSource('csvDATA').setData('csvDATA');"> <label for="solar"> Solar </label>
+            onchange="filterPowerPlants('SOLAR');"> <label for="solar">
+            Solar </label>
 
           <input type="checkbox" name="wind" value="WIND"
-            onchange="filterPowerPlants('WIND'); map.getSource('csvDATA').setData('csvDATA');"> <label for="wind"> Wind </label>
+            onchange="filterPowerPlants('WIND');"> <label for="wind"> Wind
+          </label>
 
           <input type="checkbox" name="storage" value="OFSL"
-            onchange="filterPowerPlants('OFSL'); map.getSource('csvDATA').setData('csvDATA');"> <label for="storage"> Energy Storage </label>
+            onchange="filterPowerPlants('OFSL');"> <label for="storage">
+            Energy Storage </label>
 
           <input type="checkbox" name="oil" value="OIL"
-            onchange="filterPowerPlants('OIL'); map.getSource('csvDATA').setData('csvDATA');"> <label for="oil"> Oil </label>
+            onchange="filterPowerPlants('OIL');"> <label for="oil"> Oil
+          </label>
 
           <input type="checkbox" name="othf" value="OTHF"
-            onchange="filterPowerPlants('OTHF'); map.getSource('csvDATA').setData('csvDATA');"> <label for="othf"> OTHF </label>
+            onchange="filterPowerPlants('OTHF');"> <label for="othf"> OTHF
+          </label>
         </div>
       </div>
     </div>
@@ -60,8 +71,7 @@
   </div>
 
   <script>
-
-const fullscreen = document.getElementById('fullscreen');
+    const fullscreen = document.getElementById('fullscreen');
     var transformRequest = (url, resourceType) => {
       var isMapboxRequest =
         url.slice(8, 22) === "api.mapbox.com" ||
@@ -244,30 +254,14 @@ const fullscreen = document.getElementById('fullscreen');
             });
 
             function filterPowerPlants(type) {
-              // Get all of the power plant markers on the map
-              const powerPlantMarkers = map.querySourceFeatures('csvData', {
-                sourceLayer: 'data'
+              var filteredData = csvData.features.filter(function (feature) {
+                return feature.properties.TYPE == type && document.getElementsByName(type)[0].checked;
               });
-
-              // Loop through each marker and check if it has the requested type
-              for (let i = 0; i < powerPlantMarkers.length; i++) {
-                const marker = powerPlantMarkers[i];
-                const plantType = marker.properties.TYPE;
-
-                // If the marker has the requested type, show it on the map
-                if (plantType === type || !type) {
-                  map.setFeatureState(marker, {
-                    hidden: false
-                  });
-                }
-
-                // Otherwise, hide it from the map
-                else {
-                  map.setFeatureState(marker, {
-                    hidden: true
-                  });
-                }
-              }
+              var newData = {
+                "type": "FeatureCollection",
+                "features": filteredData
+              };
+              map.getSource('csvDATA').setData(newData);
             }
 
             // When a click event occurs on a feature in the csvData layer, open a popup at the
@@ -321,16 +315,16 @@ const fullscreen = document.getElementById('fullscreen');
 
           fullscreen.addEventListener('click', toggleFullscreen)
 
-        function toggleFullscreen() {
+          function toggleFullscreen() {
             let elem = document.getElementById("mapcontainer");
             if (!document.fullscreenElement) {
-                elem.requestFullscreen().catch((err) => {
-                    alert(`Error attempting to enable fullscreen mode: ${err.message} (${err.name})`);
-                });
+              elem.requestFullscreen().catch((err) => {
+                alert(`Error attempting to enable fullscreen mode: ${err.message} (${err.name})`);
+              });
             } else {
-                document.exitFullscreen();
+              document.exitFullscreen();
             }
-        }
+          }
         });
       };
     });
