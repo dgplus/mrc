@@ -308,19 +308,19 @@
           }
         });
       };
-
-      function filterPoints(type) {
-              var filteredData = data.features.filter(function (feature) {
-                return feature.properties.TYPE == type && document.getElementsByName(type)[0].checked;
-              });
-              var newData = {
-                "type": "FeatureCollection",
-                "features": filteredData
-              };
-              map.getSource('data').setData(newData);
-            }
-            
     });
+
+    function filterPoints(type) {
+      var filteredData = data.features.filter(function (feature) {
+        return feature.properties.TYPE == type && document.getElementsByName(type)[0].checked;
+      });
+      var newData = {
+        "type": "FeatureCollection",
+        "features": filteredData
+      };
+      map.getSource('data').setData(newData);
+    }
+    
   </script>
 
 </body>
