@@ -25,15 +25,15 @@
           <strong>Show/Hide Features</strong>
           <hr />
           <label class='menu-item'>
-            <input type='checkbox' id='type1-checkbox' value='SOLAR' unchecked />
+            <input type='checkbox' id='type1-checkbox' value='SOLAR' checked />
             Solar
           </label>
           <label class='menu-item'>
-            <input type='checkbox' id='type2-checkbox' value='WIND' unchecked />
+            <input type='checkbox' id='type2-checkbox' value='WIND' checked />
             Wind
           </label>
           <label class='menu-item'>
-            <input type='checkbox' id='type3-checkbox' value='COAL' unchecked />
+            <input type='checkbox' id='type3-checkbox' value='COAL' checked />
             Coal
           </label>
         </div>
@@ -78,7 +78,7 @@
 
     function filterFeatures() {
       // Get all checked checkboxes
-      const checkedboxes = document.querySelectorAll('input[name="type"]:checked');
+      const checkedboxes = document.querySelectorAll('input:checked');
       // Create an array of types from the checked checkboxes
       const types = [];
       checkedboxes.forEach((checkbox) => {
