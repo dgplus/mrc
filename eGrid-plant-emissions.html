@@ -25,15 +25,15 @@
           <strong>Show/Hide Features</strong>
           <hr />
           <label class='menu-item'>
-            <input type='checkbox' id='type1-checkbox' value='SOLAR' checked />
+            <input type='checkbox' id='type1-checkbox' value='SOLAR' unchecked />
             Solar
           </label>
           <label class='menu-item'>
-            <input type='checkbox' id='type2-checkbox' value='WIND' checked />
+            <input type='checkbox' id='type2-checkbox' value='WIND' unchecked />
             Wind
           </label>
           <label class='menu-item'>
-            <input type='checkbox' id='type3-checkbox' value='COAL' checked />
+            <input type='checkbox' id='type3-checkbox' value='COAL' unchecked />
             Coal
           </label>
         </div>
@@ -69,24 +69,25 @@
       transformRequest: transformRequest
     });
 
+    // Get all checked checkboxes
+    const checkboxes = document.querySelectorAll('input[name="type"]:checked');
+    // Create an array of types from the checked checkboxes
+    const types = [];
+
     function filterFeatures() {
-  // Get all checked checkboxes
-  const checkboxes = document.querySelectorAll('input[name="type"]:checked');
-  // Create an array of types from the checked checkboxes
-  const types = [];
-  checkboxes.forEach((checkbox) => {
-    types.push(checkbox.value);
-  });
+      checkboxes.forEach((checkbox) => {
+        types.push(checkbox.value);
+      });
 
-  // Construct the filter expression using the array of types
-  let filter = ['in', 'TYPE'];
-  types.forEach((type) => {
-    filter.push(type);
-  });
+      // Construct the filter expression using the array of types
+      let filter = ['in', 'TYPE'];
+      types.forEach((type) => {
+        filter.push(type);
+      });
 
-  // Set the map's filter
-  map.setFilter('csvData', filter);
-}
+      // Set the map's filter
+      map.setFilter('markers', filter);
+    }
 
     $(document).ready(function () {
       $.ajax({
