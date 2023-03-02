@@ -11,6 +11,18 @@
   <script src='https://npmcdn.com/csv2geojson@latest/csv2geojson.js'></script>
   <script src='https://npmcdn.com/@turf/turf/turf.min.js'></script>
   <link href="https://dgplus.github.io/maps/css/map-styles.css" rel="stylesheet">
+  <script>
+    function filterPoints(type) {
+      var filteredData = data.features.filter(function (feature) {
+        return feature.properties.TYPE == type && document.getElementsByName(type)[0].checked;
+      });
+      var newData = {
+        "type": "FeatureCollection",
+        "features": filteredData
+      };
+      map.getSource('data').setData(newData);
+    }
+  </script>
 </head>
 
 <body>
@@ -292,17 +304,6 @@
             });
 
           });
-
-          function filterPoints(type) {
-            var filteredData = data.features.filter(function (feature) {
-              return feature.properties.TYPE == type && document.getElementsByName(type)[0].checked;
-            });
-            var newData = {
-              "type": "FeatureCollection",
-              "features": filteredData
-            };
-            map.getSource('data').setData(newData);
-          }
 
           fullscreen.addEventListener('click', toggleFullscreen)
 
