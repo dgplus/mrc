@@ -101,13 +101,16 @@
         }
       });
 
+var data;
+
       function makeGeoJSON(csvData) {
         csv2geojson.csv2geojson(csvData, {
           latfield: 'LAT',
           lonfield: 'LON',
           delimiter: ',',
           numericFields: 'MW,CARB,CARBRT',
-        }, function (err, data) {
+        }, function (err, geojson) {
+          data = geojson;
           map.on('load', function () {
 
             //Add the the layer to the map
@@ -116,7 +119,7 @@
               'type': 'circle',
               'source': {
                 'type': 'geojson',
-                'data': data
+                'data': geojson
               },
               'paint': {
                 'circle-radius': [
@@ -287,7 +290,7 @@
               map.getCanvas().style.cursor = '';
             });
 
-            var bbox = turf.bbox(data);
+            var bbox = turf.bbox(geojson);
             map.fitBounds(bbox, {
               padding: 50
             });
@@ -320,7 +323,7 @@
       };
       map.getSource('data').setData(newData);
     }
-    
+
   </script>
 
 </body>
