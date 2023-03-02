@@ -90,6 +90,8 @@
       transformRequest: transformRequest
     });
 
+    var data;
+
     $(document).ready(function () {
       $.ajax({
         type: "GET",
@@ -100,8 +102,6 @@
           makeGeoJSON(csvData);
         }
       });
-
-var data;
 
       function makeGeoJSON(csvData) {
         csv2geojson.csv2geojson(csvData, {
