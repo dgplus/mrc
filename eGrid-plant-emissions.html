@@ -22,40 +22,40 @@
       <div class="map-overlay-inner">
         <h3>CO2 Emissions of Power Plants in the US</h3>
         <div id='checkboxes'>
-          <input type="checkbox" name="BIOMASS" value="BIOMASS" onchange="document.filterPoints('BIOMASS');"> <label
+          <input type="checkbox" name="BIOMASS" value="BIOMASS" onchange="filterPoints('BIOMASS');"> <label
             for="BIOMASS">
             Biomass </label>
 
-          <input type="checkbox" name="COAL" value="COAL" onchange="document.filterPoints('COAL');"> <label for="COAL"> Coal
+          <input type="checkbox" name="COAL" value="COAL" onchange="filterPoints('COAL');"> <label for="COAL"> Coal
           </label>
 
-          <input type="checkbox" name="GAS" value="GAS" onchange="document.filterPoints('GAS');"> <label for="GAS"> Gas
+          <input type="checkbox" name="GAS" value="GAS" onchange="filterPoints('GAS');"> <label for="GAS"> Gas
           </label>
 
-          <input type="checkbox" name="GEOTHERMAL" value="GEOTHERMAL" onchange="document.filterPoints('GEOTHERMAL');">
+          <input type="checkbox" name="GEOTHERMAL" value="GEOTHERMAL" onchange="filterPoints('GEOTHERMAL');">
           <label for="GEOTHERMAL">
             Geothermal </label>
 
-          <input type="checkbox" name="HYDRO" value="HYDRO" onchange="document.filterPoints('HYDRO');"> <label for="HYDRO">
+          <input type="checkbox" name="HYDRO" value="HYDRO" onchange="filterPoints('HYDRO');"> <label for="HYDRO">
             Hydro </label>
 
-          <input type="checkbox" name="NUCLEAR" value="NUCLEAR" onchange="document.filterPoints('NUCLEAR');"> <label
+          <input type="checkbox" name="NUCLEAR" value="NUCLEAR" onchange="filterPoints('NUCLEAR');"> <label
             for="NUCLEAR">
             Nuclear </label>
 
-          <input type="checkbox" name="SOLAR" value="SOLAR" onchange="document.filterPoints('SOLAR');"> <label for="SOLAR">
+          <input type="checkbox" name="SOLAR" value="SOLAR" onchange="filterPoints('SOLAR');"> <label for="SOLAR">
             Solar </label>
 
-          <input type="checkbox" name="WIND" value="WIND" onchange="document.filterPoints('WIND');"> <label for="WIND"> Wind
+          <input type="checkbox" name="WIND" value="WIND" onchange="filterPoints('WIND');"> <label for="WIND"> Wind
           </label>
 
-          <input type="checkbox" name="OFSL" value="OFSL" onchange="document.filterPoints('OFSL');"> <label for="OFSL">
+          <input type="checkbox" name="OFSL" value="OFSL" onchange="filterPoints('OFSL');"> <label for="OFSL">
             Energy Storage </label>
 
-          <input type="checkbox" name="OIL" value="OIL" onchange="document.filterPoints('OIL');"> <label for="OIL"> Oil
+          <input type="checkbox" name="OIL" value="OIL" onchange="filterPoints('OIL');"> <label for="OIL"> Oil
           </label>
 
-          <input type="checkbox" name="OTHF" value="OTHF" onchange="document.filterPoints('OTHF');"> <label for="OTHF"> OTHF
+          <input type="checkbox" name="OTHF" value="OTHF" onchange="filterPoints('OTHF');"> <label for="OTHF"> OTHF
           </label>
         </div>
       </div>
@@ -109,17 +109,6 @@
           numericFields: 'MW,CARB,CARBRT',
         }, function (err, data) {
           map.on('load', function () {
-
-            function filterPoints(type) {
-              var filteredData = data.features.filter(function (feature) {
-                return feature.properties.TYPE == type && document.getElementsByName(type)[0].checked;
-              });
-              var newData = {
-                "type": "FeatureCollection",
-                "features": filteredData
-              };
-              map.getSource('data').setData(newData);
-            }
 
             //Add the the layer to the map
             map.addLayer({
@@ -319,6 +308,18 @@
           }
         });
       };
+
+      function filterPoints(type) {
+              var filteredData = data.features.filter(function (feature) {
+                return feature.properties.TYPE == type && document.getElementsByName(type)[0].checked;
+              });
+              var newData = {
+                "type": "FeatureCollection",
+                "features": filteredData
+              };
+              map.getSource('data').setData(newData);
+            }
+            
     });
   </script>
 
