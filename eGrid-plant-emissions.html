@@ -69,13 +69,19 @@
       transformRequest: transformRequest
     });
 
-    // Get all checked checkboxes
-    const checkboxes = document.querySelectorAll('input[name="type"]:checked');
-    // Create an array of types from the checked checkboxes
-    const types = [];
+    const checkboxes = document.querySelectorAll("input[type=checkbox]");
+    checkboxes.forEach(checkbox => {
+      checkbox.addEventListener("change", () => {
+        filterFeatures();
+      });
+    });
 
     function filterFeatures() {
-      checkboxes.forEach((checkbox) => {
+      // Get all checked checkboxes
+      const checkedboxes = document.querySelectorAll('input[name="type"]:checked');
+      // Create an array of types from the checked checkboxes
+      const types = [];
+      checkedboxes.forEach((checkbox) => {
         types.push(checkbox.value);
       });
 
@@ -86,8 +92,9 @@
       });
 
       // Set the map's filter
-      map.setFilter('markers', filter);
+      map.setFilter('csvData', filter);
     }
+
 
     $(document).ready(function () {
       $.ajax({
