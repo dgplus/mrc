@@ -89,11 +89,15 @@
       container: 'map', // container id
       style: 'mapbox://styles/mapbox/light-v11', // YOUR TURN: choose a style: https://docs.mapbox.com/api/maps/#styles
       center: {
-        lng: -116.48299257741193,
-        lat: 40.92230044374887
+        lng: -130.664,
+        lat: 51.258,
       }, // starting position [lng, lat]
       zoom: 3.5, // starting zoom
       minZoom: 2.2,
+      maxBounds: [
+        [-122.66336, 37.492987], // Southwest coordinates
+        [-122.250481, 37.871651] // Northeast coordinates
+      ]
       transformRequest: transformRequest
     });
 
@@ -279,6 +283,17 @@
                 'circle-stroke-width': 0.75
               }
             });
+
+            map.on('mousemove', (e) => {
+              document.getElementById('info').innerHTML =
+                // `e.point` is the x, y coordinates of the `mousemove` event
+                // relative to the top-left corner of the map.
+                JSON.stringify(e.point) +
+                '<br />' +
+                // `e.lngLat` is the longitude, latitude geographical position of the event.
+                JSON.stringify(e.lngLat.wrap());
+            });
+
 
             // When a click event occurs on a feature in the csvData layer, open a popup at the
             // location of the feature, with description HTML from its properties.
