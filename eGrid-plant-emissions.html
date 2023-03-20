@@ -106,15 +106,15 @@
       container: 'map', // container id
       style: 'mapbox://styles/mapbox/light-v11', // YOUR TURN: choose a style: https://docs.mapbox.com/api/maps/#styles
       center: {
-        lng: -130.664,
-        lat: 51.258,
+        lng: -141.664,
+        lat: 47.258,
       }, // starting position [lng, lat]
       zoom: 3.5, // starting zoom
       minZoom: 2.2,
-      // maxBounds: [
-      //   [-122.66336, 37.492987], // Southwest coordinates
-      //   [-122.250481, 37.871651] // Northeast coordinates
-      // ],
+      maxBounds: [
+        [118.66336, 12.492987], // Southwest coordinates
+        [-45.250481, 71.871651] // Northeast coordinates
+      ],
       transformRequest: transformRequest
     });
 
