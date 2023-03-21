@@ -334,7 +334,7 @@
               // For example: e.features[0].properties.Name is retrieving information from the field Name in the original CSV.
 
               // Get the 'TYPE' property from the feature's properties
-              var type = e.features[0].properties.TYPE.toLowerCase().charAt(0).toUpperCase() + e.features[0].properties.TYPE.slice(1);
+              // var type = e.features[0].properties.TYPE.toLowerCase().charAt(0).toUpperCase() + e.features[0].properties.TYPE.slice(1);
 
               // Format the type string with first-letter-capitalization
               // type = type.toLowerCase().charAt(0).toUpperCase() + type.slice(1);
@@ -342,9 +342,8 @@
 
               var description =
                 `<h3>` + e.features[0].properties.NAME + `</h3>` + '<hr />' +
-                `<h4>` + `<b>` + `Location: ` + `</b>` + e.features[0].properties.COUNTY + ` County` +
-                `, ` + e.features[0].properties.STATE + `</h4>` +
-                `<h4>` + `<b>` + `Fuel Type: ` + `</b>` + type + `</h4>` +
+                `<h4>` + `<b>` + `Location: ` + `</b>` + e.features[0].properties.COUNTY + ` County` + `, ` + e.features[0].properties.STATE + `</h4>` +
+                `<h4>` + `<b>` + `Fuel Type: ` + `</b>` + e.features[0].properties.TYPE.toLowerCase().charAt(0).toUpperCase() + e.features[0].properties.TYPE.slice(1) + `</h4>` +
                 `<h4>` + `<b>` + `Utility: ` + `</b>` + e.features[0].properties.UTIL + `</h4>` +
                 `<h4>` + `<b>` + `Annual CO2 Emissions: ` + `</b>` + e.features[0].properties.CARB + ` tons` + `</h4>`;
 
