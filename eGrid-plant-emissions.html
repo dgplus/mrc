@@ -46,7 +46,7 @@
 
   <div id="mapcontainer">
     <div id="map"></div>
-    <pre id="info"></pre>
+    <!-- <pre id="info"></pre> -->
     <div class="map-overlay top">
       <div class="map-overlay-inner">
         <h3>CO2 Emissions of <br> Power Plants in the US</h3>
@@ -313,15 +313,15 @@
               }
             });
 
-            map.on('mousemove', (e) => {
-              document.getElementById('info').innerHTML =
-                // `e.point` is the x, y coordinates of the `mousemove` event
-                // relative to the top-left corner of the map.
-                JSON.stringify(e.point) +
-                '<br />' +
-                // `e.lngLat` is the longitude, latitude geographical position of the event.
-                JSON.stringify(e.lngLat.wrap());
-            });
+            // map.on('mousemove', (e) => {
+            //   document.getElementById('info').innerHTML =
+            //     // `e.point` is the x, y coordinates of the `mousemove` event
+            //     // relative to the top-left corner of the map.
+            //     JSON.stringify(e.point) +
+            //     '<br />' +
+            //     // `e.lngLat` is the longitude, latitude geographical position of the event.
+            //     JSON.stringify(e.lngLat.wrap());
+            // });
 
 
             // When a click event occurs on a feature in the csvData layer, open a popup at the
