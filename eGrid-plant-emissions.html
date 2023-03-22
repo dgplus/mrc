@@ -323,7 +323,6 @@
             //     JSON.stringify(e.lngLat.wrap());
             // });
 
-
             // When a click event occurs on a feature in the csvData layer, open a popup at the
             // location of the feature, with description HTML from its properties.
             map.on('click', 'csvData', function (e) {
@@ -337,13 +336,12 @@
               var type = e.features[0].properties.TYPE
 
               // Format the type string with first-letter-capitalization
-              type = type.toLowerCase().charAt(0).toUpperCase() + type.slice(1);
-
+              fuel = type.toLowerCase().charAt(0).toUpperCase() + type.slice(1);
 
               var description =
                 `<h3>` + e.features[0].properties.NAME + `</h3>` + '<hr />' +
                 `<h4>` + `<b>` + `Location: ` + `</b>` + e.features[0].properties.COUNTY + ` County` + `, ` + e.features[0].properties.STATE + `</h4>` +
-                `<h4>` + `<b>` + `Fuel Type: ` + `</b>` + type + `</h4>` +
+                `<h4>` + `<b>` + `Fuel Type: ` + `</b>` + fuel + `</h4>` +
                 `<h4>` + `<b>` + `Utility: ` + `</b>` + e.features[0].properties.UTIL + `</h4>` +
                 `<h4>` + `<b>` + `Annual CO2 Emissions: ` + `</b>` + e.features[0].properties.CARB + ` tons` + `</h4>`;
 
