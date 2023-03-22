@@ -336,14 +336,27 @@
               var type = String(e.features[0].properties.TYPE);
 
               // Format the type string with first-letter-capitalization
-              fuel = type.toLowerCase().charAt(0).toUpperCase() + type.slice(1);
+              title = function toTitleCase(type) {
+                return type.toLowerCase().split(' ').map(function (word) {
+                  return (word.charAt(0).toUpperCase() + word.slice(1));
+                }).join(' ');
+              };
+
+              fuel = title(type);
+
+// type.toLowerCase().charAt(0).toUpperCase() + type.slice(1);
+              
 
               var description =
                 `<h3>` + e.features[0].properties.NAME + `</h3>` + '<hr />' +
-                `<h4>` + `<b>` + `Location: ` + `</b>` + e.features[0].properties.COUNTY + ` County` + `, ` + e.features[0].properties.STATE + `</h4>` +
+                `<h4>` + `<b>` + `Location: ` + `</b>` + e.features[0].properties.COUNTY + ` County` +
+                `, ` + e.features[0].properties.STATE + `</h4>` +
                 `<h4>` + `<b>` + `Fuel Type: ` + `</b>` + fuel + `</h4>` +
                 `<h4>` + `<b>` + `Utility: ` + `</b>` + e.features[0].properties.UTIL + `</h4>` +
-                `<h4>` + `<b>` + `Annual CO2 Emissions: ` + `</b>` + Number(parseFloat(e.features[0].properties.CARB).toFixed(2)).toLocaleString('en', {minimumFractionDigits: 2}) + ` tons` + `</h4>`;
+                `<h4>` + `<b>` + `Annual CO2 Emissions: ` + `</b>` + Number(parseFloat(e.features[0]
+                  .properties.CARB).toFixed(2)).toLocaleString('en', {
+                  minimumFractionDigits: 2
+                }) + ` tons` + `</h4>`;
 
               // Ensure that if the map is zoomed out such that multiple
               // copies of the feature are visible, the popup appears
