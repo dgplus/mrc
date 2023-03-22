@@ -154,7 +154,7 @@
 
       // Set the map's filter
       map.setFilter('csvData', filter);
-    }
+    };
 
 
     $(document).ready(function () {
@@ -343,10 +343,7 @@
               };
 
               fuel = title(type);
-
-// type.toLowerCase().charAt(0).toUpperCase() + type.slice(1);
               
-
               var description =
                 `<h3>` + e.features[0].properties.NAME + `</h3>` + '<hr />' +
                 `<h4>` + `<b>` + `Location: ` + `</b>` + e.features[0].properties.COUNTY + ` County` +
