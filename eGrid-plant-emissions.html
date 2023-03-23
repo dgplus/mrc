@@ -49,15 +49,15 @@
           <label class='menu-item'>
             <input type='checkbox' id='HYDRO' value='HYDRO' checked />
             Hydro
-          </label>    
+          </label>
           <label class='menu-item'>
             <input type='checkbox' id='GEOTHERMAL' value='GEOTHERMAL' checked />
             Geothermal
-          </label>       
+          </label>
           <label class='menu-item'>
             <input type='checkbox' id='BIOMASS' value='BIOMASS' checked />
             Biomass
-          </label>                     
+          </label>
           <label class='menu-item'>
             <input type='checkbox' id='OIL' value='OIL' checked />
             Oil
@@ -69,7 +69,7 @@
           <label class='menu-item'>
             <input type='checkbox' id='GAS' value='GAS' checked />
             Gas
-          </label>          
+          </label>
           <label class='menu-item'>
             <input type='checkbox' id='OTHF' value='OTHF' checked />
             Other Fossil Fuel
@@ -97,9 +97,9 @@
     };
 
     const bounds = [
-[-217.61932, -32.38898], // Southwest coordinates
-[-1.70188, 82.70255] // Northeast coordinates
-];
+      [-217.61932, -32.38898], // Southwest coordinates
+      [-1.70188, 82.70255] // Northeast coordinates
+    ];
 
     //YOUR TURN: add your Mapbox token
     mapboxgl.accessToken =
@@ -320,14 +320,21 @@
               };
 
               fuel = title(type);
-              
+
               var description =
                 `<h3>` + e.features[0].properties.NAME + `</h3>` + '<hr />' +
-                `\n<h4>` + `<b>` + `Location: ` + `</b>` + e.features[0].properties.COUNTY + ` County` + `, ` + e.features[0].properties.STATE + `</h4>` +
-                `\n<h4>` + `<b>` + `Utility: ` + `</b>` + e.features[0].properties.UTIL + `</h4>` +                
+                `\n<h4>` + `<b>` + `Location: ` + `</b>` + e.features[0].properties.COUNTY + ` County` +
+                `, ` + e.features[0].properties.STATE + `</h4>` +
+                `\n<h4>` + `<b>` + `Utility: ` + `</b>` + e.features[0].properties.UTIL + `</h4>` +
                 `\n<h4>` + `<b>` + `Fuel Type: ` + `</b>` + fuel + `</h4>` +
-                `\n<h4>` + `<b>` + `Capacity: ` + `</b>` + Number(parseFloat(e.features[0].properties.MW).toFixed(2)).toLocaleString('en', {minimumFractionDigits: 2}) + ` MWs` + `</h4>` +
-                `\n<h4>` + `<b>` + `Annual CO2 Emissions: ` + `</b>` + Number(parseFloat(e.features[0].properties.CARB).toFixed(2)).toLocaleString('en', {minimumFractionDigits: 2}) + ` tons` + `</h4>`;
+                `\n<h4>` + `<b>` + `Capacity: ` + `</b>` + Number(parseFloat(e.features[0].properties
+                  .MW).toFixed(2)).toLocaleString('en', {
+                  minimumFractionDigits: 2
+                }) + ` MWs` + `</h4>` +
+                `\n<h4>` + `<b>` + `Annual CO2 Emissions: ` + `</b>` + Number(parseFloat(e.features[0]
+                  .properties.CARB).toFixed(2)).toLocaleString('en', {
+                  minimumFractionDigits: 2
+                }) + ` tons` + `</h4>`;
 
               // Ensure that if the map is zoomed out such that multiple
               // copies of the feature are visible, the popup appears
