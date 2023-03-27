@@ -85,7 +85,7 @@
     <div id="fullscreen">Full screen</div>
   </div>
 
-  <script type="module" lang="ts">
+  <script>
     const fullscreen = document.getElementById('fullscreen');
     var transformRequest = (url, resourceType) => {
       var isMapboxRequest =
@@ -124,13 +124,6 @@
         filterFeatures();
       });
     });
-
-    import LegendControl from './mapboxgl-legend';
-    import './mapboxgl-legend/dist/style.css';
-
-    const legend = new LegendControl();
-    map.addControl(legend, 'bottom-left');
-
 
     function filterFeatures() {
       // Get all checked checkboxes
