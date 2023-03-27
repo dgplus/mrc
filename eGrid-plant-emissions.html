@@ -118,32 +118,6 @@
       transformRequest: transformRequest
     });
 
-    const checkboxes = document.querySelectorAll("input[type=checkbox]");
-    checkboxes.forEach(checkbox => {
-      checkbox.addEventListener("change", () => {
-        filterFeatures();
-      });
-    });
-
-    function filterFeatures() {
-      // Get all checked checkboxes
-      const checkedboxes = document.querySelectorAll('input:checked');
-      // Create an array of types from the checked checkboxes
-      const types = [];
-      checkedboxes.forEach((checkbox) => {
-        types.push(checkbox.value);
-      });
-
-      // Construct the filter expression using the array of types
-      let filter = ['in', 'TYPE'];
-      types.forEach((type) => {
-        filter.push(type);
-      });
-
-      // Set the map's filter
-      map.setFilter('csvData', filter);
-    };
-
     $(document).ready(function () {
       $.ajax({
         type: "GET",
@@ -376,6 +350,39 @@
             });
 
           });
+
+          const checkboxes = document.querySelectorAll("input[type=checkbox]");
+          checkboxes.forEach(checkbox => {
+            checkbox.addEventListener("change", () => {
+              filterFeatures();
+            });
+          });
+
+          function filterFeatures() {
+            // Get all checked checkboxes
+            const checkedboxes = document.querySelectorAll('input:checked');
+            // Create an array of types from the checked checkboxes
+            const types = [];
+            checkedboxes.forEach((checkbox) => {
+              types.push(checkbox.value);
+            });
+
+            // Construct the filter expression using the array of types
+            let filter = ['in', 'TYPE'];
+            types.forEach((type) => {
+              filter.push(type);
+            });
+
+            // Set the map's filter
+            map.setFilter('csvData', filter);
+          };
+
+          import LegendControl from 'mapboxgl-legend';
+          import 'mapboxgl-legend/dist/style.css';
+
+          const legend = new LegendControl();
+          map.addControl(legend, 'bottom-left');
+
 
           fullscreen.addEventListener('click', toggleFullscreen)
 
