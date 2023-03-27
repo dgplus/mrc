@@ -125,6 +125,13 @@
       });
     });
 
+    import LegendControl from 'mapboxgl-legend';
+    import 'mapboxgl-legend/dist/style.css';
+
+    const legend = new LegendControl();
+    map.addControl(legend, 'bottom-left');
+
+
     function filterFeatures() {
       // Get all checked checkboxes
       const checkedboxes = document.querySelectorAll('input:checked');
@@ -143,7 +150,6 @@
       // Set the map's filter
       map.setFilter('csvData', filter);
     };
-
 
     $(document).ready(function () {
       $.ajax({
