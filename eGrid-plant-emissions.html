@@ -118,6 +118,216 @@
       transformRequest: transformRequest
     });
 
+    map.on('load', function () {
+
+      map.addSource('geojson', {
+        'type': 'geojson',
+        'data': { type: 'FeatureCollection', features: Array(0) }
+      });
+      //Add the the layer to the map
+      map.addLayer({
+        'id': 'csvData',
+        'type': 'circle',
+        'source': 'geojson',
+        'paint': {
+          'circle-radius': [
+            "interpolate",
+            ["linear"], 
+            ["zoom"],
+            0,
+            [
+              "interpolate",
+              ["exponential", 1],
+              ["get", "CARB"],
+              0,
+              2,
+              100,
+              3,
+              10000,
+              6,
+              100000,
+              8,
+              1000000,
+              10,
+              10000000,
+              12,
+              20000000,
+              15
+            ],
+            5,
+            [
+              "interpolate",
+              ["exponential", 1],
+              ["get", "CARB"],
+              0,
+              2,
+              100,
+              3,
+              10000,
+              6,
+              100000,
+              8,
+              1000000,
+              10,
+              10000000,
+              12,
+              20000000,
+              15
+            ],
+            10,
+            [
+              "interpolate",
+              ["exponential", 1],
+              ["get", "CARB"],
+              0,
+              2,
+              100,
+              3,
+              10000,
+              6,
+              100000,
+              8,
+              1000000,
+              10,
+              10000000,
+              12,
+              20000000,
+              15
+            ],
+            22,
+            [
+              "interpolate",
+              ["exponential", 1],
+              ["get", "CARB"],
+              0,
+              2,
+              100,
+              3,
+              10000,
+              6,
+              100000,
+              8,
+              1000000,
+              10,
+              10000000,
+              12,
+              20000000,
+              15
+            ]
+          ],
+          'circle-color': [
+            "match",
+            ["get", "TYPE"],
+            ["OIL"],
+            "#b21fc8",
+            ["HYDRO"],
+            "#71e5f5",
+            ["SOLAR"],
+            "#f4e158",
+            ["BIOMASS"],
+            "#00d41e",
+            ["WIND"],
+            "#679bfa",
+            ["COAL"],
+            "#705747",
+            ["GAS"],
+            "#a8a8a8",
+            ["GEOTHERMAL"],
+            "#512ad1",
+            ["NUCLEAR"],
+            "#db75fa",
+            "#000000"
+          ],
+          'circle-opacity': 0.7,
+          'circle-stroke-color': [
+            "match",
+            ["get", "TYPE"],
+            ["OIL"],
+            "#b21fc8",
+            ["HYDRO"],
+            "#71e5f5",
+            ["SOLAR"],
+            "#f4e158",
+            ["BIOMASS"],
+            "#00d41e",
+            ["WIND"],
+            "#679bfa",
+            ["COAL"],
+            "#705747",
+            ["GAS"],
+            "#a8a8a8",
+            ["GEOTHERMAL"],
+            "#512ad1",
+            ["NUCLEAR"],
+            "#db75fa",
+            "#000000"
+          ],
+          'circle-stroke-width': 0.75
+        }
+      });
+
+      // When a click event occurs on a feature in the csvData layer, open a popup at the
+      // location of the feature, with description HTML from its properties.
+      map.on('click', 'csvData', function (e) {
+        var coordinates = e.features[0].geometry.coordinates.slice();
+
+        //set popup text
+        //You can adjust the values of the popup to match the headers of your CSV.
+        // For example: e.features[0].properties.Name is retrieving information from the field Name in the original CSV.
+
+        // Get the 'TYPE' property from the feature's properties
+        var type = String(e.features[0].properties.TYPE);
+
+        // Format the type string with first-letter-capitalization
+        title = function toTitleCase(type) {
+          return type.toLowerCase().split(' ').map(function (word) {
+            return (word.charAt(0).toUpperCase() + word.slice(1));
+          }).join(' ');
+        };
+
+        fuel = title(type);
+
+        var description =
+          `<h3>` + e.features[0].properties.NAME + `</h3>` + '<hr />' +
+          `\n<h4>` + `<b>` + `Location: ` + `</b>` + e.features[0].properties.COUNTY + ` County` +
+          `, ` + e.features[0].properties.STATE + `</h4>` +
+          `\n<h4>` + `<b>` + `Fuel Type: ` + `</b>` + fuel + `</h4>` +
+          `\n<h4>` + `<b>` + `Capacity: ` + `</b>` + Number(parseFloat(e.features[0].properties
+            .MW).toFixed(2)).toLocaleString('en', {
+              minimumFractionDigits: 2
+            }) + ` MWs` + `</h4>` +
+          `\n<h4>` + `<b>` + `Annual CO2 Emissions: ` + `</b>` + Number(parseFloat(e.features[0]
+            .properties.CARB).toFixed(2)).toLocaleString('en', {
+              minimumFractionDigits: 2
+            }) + ` tons` + `</h4>`;
+
+        // Ensure that if the map is zoomed out such that multiple
+        // copies of the feature are visible, the popup appears
+        // over the copy being pointed to.
+        while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+          coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+        }
+
+        //add Popup to map
+        new mapboxgl.Popup()
+          .setLngLat(coordinates)
+          .setHTML(description)
+          .addTo(map);
+      });
+
+      // Change the cursor to a pointer when the mouse is over the places layer.
+      map.on('mouseenter', 'csvData', function () {
+        map.getCanvas().style.cursor = 'pointer';
+      });
+
+      // Change it back to a pointer when it leaves.
+      map.on('mouseleave', 'places', function () {
+        map.getCanvas().style.cursor = '';
+      });
+
+    });
+
+
     const checkboxes = document.querySelectorAll("input[type=checkbox]");
     checkboxes.forEach(checkbox => {
       checkbox.addEventListener("change", () => {
@@ -156,6 +366,8 @@
       });
 
       function makeGeoJSON(csvData) {
+
+        console.log('csvData', csvData);
         csv2geojson.csv2geojson(csvData, {
           latfield: 'LAT',
           lonfield: 'LON',
@@ -163,218 +375,11 @@
           numericFields: 'MW,CARB,CARBRT',
         }, function (err, geojson) {
           data = geojson;
-          map.on('load', function () {
 
-            //Add the the layer to the map
-            map.addLayer({
-              'id': 'csvData',
-              'type': 'circle',
-              'source': {
-                'type': 'geojson',
-                'data': geojson
-              },
-              'paint': {
-                'circle-radius': [
-                  "interpolate",
-                  ["linear"],
-                  ["zoom"],
-                  0,
-                  [
-                    "interpolate",
-                    ["exponential", 1],
-                    ["get", "CARB"],
-                    0,
-                    2,
-                    100,
-                    3,
-                    10000,
-                    6,
-                    100000,
-                    8,
-                    1000000,
-                    10,
-                    10000000,
-                    12,
-                    20000000,
-                    15
-                  ],
-                  5,
-                  [
-                    "interpolate",
-                    ["exponential", 1],
-                    ["get", "CARB"],
-                    0,
-                    2,
-                    100,
-                    3,
-                    10000,
-                    6,
-                    100000,
-                    8,
-                    1000000,
-                    10,
-                    10000000,
-                    12,
-                    20000000,
-                    15
-                  ],
-                  10,
-                  [
-                    "interpolate",
-                    ["exponential", 1],
-                    ["get", "CARB"],
-                    0,
-                    2,
-                    100,
-                    3,
-                    10000,
-                    6,
-                    100000,
-                    8,
-                    1000000,
-                    10,
-                    10000000,
-                    12,
-                    20000000,
-                    15
-                  ],
-                  22,
-                  [
-                    "interpolate",
-                    ["exponential", 1],
-                    ["get", "CARB"],
-                    0,
-                    2,
-                    100,
-                    3,
-                    10000,
-                    6,
-                    100000,
-                    8,
-                    1000000,
-                    10,
-                    10000000,
-                    12,
-                    20000000,
-                    15
-                  ]
-                ],
-                'circle-color': [
-                  "match",
-                  ["get", "TYPE"],
-                  ["OIL"],
-                  "#b21fc8",
-                  ["HYDRO"],
-                  "#71e5f5",
-                  ["SOLAR"],
-                  "#f4e158",
-                  ["BIOMASS"],
-                  "#00d41e",
-                  ["WIND"],
-                  "#679bfa",
-                  ["COAL"],
-                  "#705747",
-                  ["GAS"],
-                  "#a8a8a8",
-                  ["GEOTHERMAL"],
-                  "#512ad1",
-                  ["NUCLEAR"],
-                  "#db75fa",
-                  "#000000"
-                ],
-                'circle-opacity': 0.7,
-                'circle-stroke-color': [
-                  "match",
-                  ["get", "TYPE"],
-                  ["OIL"],
-                  "#b21fc8",
-                  ["HYDRO"],
-                  "#71e5f5",
-                  ["SOLAR"],
-                  "#f4e158",
-                  ["BIOMASS"],
-                  "#00d41e",
-                  ["WIND"],
-                  "#679bfa",
-                  ["COAL"],
-                  "#705747",
-                  ["GAS"],
-                  "#a8a8a8",
-                  ["GEOTHERMAL"],
-                  "#512ad1",
-                  ["NUCLEAR"],
-                  "#db75fa",
-                  "#000000"
-                ],
-                'circle-stroke-width': 0.75
-              }
-            });
-
-            // When a click event occurs on a feature in the csvData layer, open a popup at the
-            // location of the feature, with description HTML from its properties.
-            map.on('click', 'csvData', function (e) {
-              var coordinates = e.features[0].geometry.coordinates.slice();
-
-              //set popup text
-              //You can adjust the values of the popup to match the headers of your CSV.
-              // For example: e.features[0].properties.Name is retrieving information from the field Name in the original CSV.
-
-              // Get the 'TYPE' property from the feature's properties
-              var type = String(e.features[0].properties.TYPE);
-
-              // Format the type string with first-letter-capitalization
-              title = function toTitleCase(type) {
-                return type.toLowerCase().split(' ').map(function (word) {
-                  return (word.charAt(0).toUpperCase() + word.slice(1));
-                }).join(' ');
-              };
-
-              fuel = title(type);
-
-              var description =
-                `<h3>` + e.features[0].properties.NAME + `</h3>` + '<hr />' +
-                `\n<h4>` + `<b>` + `Location: ` + `</b>` + e.features[0].properties.COUNTY + ` County` +
-                `, ` + e.features[0].properties.STATE + `</h4>` +
-                `\n<h4>` + `<b>` + `Fuel Type: ` + `</b>` + fuel + `</h4>` +
-                `\n<h4>` + `<b>` + `Capacity: ` + `</b>` + Number(parseFloat(e.features[0].properties
-                  .MW).toFixed(2)).toLocaleString('en', {
-                  minimumFractionDigits: 2
-                }) + ` MWs` + `</h4>` +
-                `\n<h4>` + `<b>` + `Annual CO2 Emissions: ` + `</b>` + Number(parseFloat(e.features[0]
-                  .properties.CARB).toFixed(2)).toLocaleString('en', {
-                  minimumFractionDigits: 2
-                }) + ` tons` + `</h4>`;
-
-              // Ensure that if the map is zoomed out such that multiple
-              // copies of the feature are visible, the popup appears
-              // over the copy being pointed to.
-              while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-                coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
-              }
-
-              //add Popup to map
-
-              new mapboxgl.Popup()
-                .setLngLat(coordinates)
-                .setHTML(description)
-                .addTo(map);
-            });
-
-            // Change the cursor to a pointer when the mouse is over the places layer.
-            map.on('mouseenter', 'csvData', function () {
-              map.getCanvas().style.cursor = 'pointer';
-            });
-
-            // Change it back to a pointer when it leaves.
-            map.on('mouseleave', 'places', function () {
-              map.getCanvas().style.cursor = '';
-            });
-
-            var bbox = turf.bbox(geojson);
-            map.fitBounds(bbox, {
-              padding: 50
-            });
-
+          map.getSource("geojson").setData(data)
+          var bbox = turf.bbox(geojson);
+          map.fitBounds(bbox, {
+            padding: 50
           });
 
           fullscreen.addEventListener('click', toggleFullscreen)
@@ -395,5 +400,4 @@
   </script>
 
 </body>
-
 </html>
