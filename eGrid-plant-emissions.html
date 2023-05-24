@@ -109,10 +109,10 @@
       container: 'map', // container id
       style: 'mapbox://styles/mapbox/light-v11', // YOUR TURN: choose a style: https://docs.mapbox.com/api/maps/#styles
       center: {
-        lng: -100.125,
-        lat: 38.733,
+        lng: -130.664,
+        lat: 51.258,
       }, // starting position [lng, lat]
-      zoom: 3.45, // starting zoom
+      zoom: 3.5, // starting zoom
       minZoom: 2.2,
       maxBounds: bounds,
       transformRequest: transformRequest
@@ -122,7 +122,10 @@
 
       map.addSource('geojson', {
         'type': 'geojson',
-        'data': { type: 'FeatureCollection', features: Array(0) }
+        'data': {
+          type: 'FeatureCollection',
+          features: Array(0)
+        }
       });
       //Add the the layer to the map
       map.addLayer({
@@ -132,7 +135,7 @@
         'paint': {
           'circle-radius': [
             "interpolate",
-            ["linear"], 
+            ["linear"],
             ["zoom"],
             0,
             [
@@ -294,12 +297,12 @@
           `\n<h4>` + `<b>` + `Fuel Type: ` + `</b>` + fuel + `</h4>` +
           `\n<h4>` + `<b>` + `Capacity: ` + `</b>` + Number(parseFloat(e.features[0].properties
             .MW).toFixed(2)).toLocaleString('en', {
-              minimumFractionDigits: 2
-            }) + ` MWs` + `</h4>` +
+            minimumFractionDigits: 2
+          }) + ` MWs` + `</h4>` +
           `\n<h4>` + `<b>` + `Annual CO2 Emissions: ` + `</b>` + Number(parseFloat(e.features[0]
             .properties.CARB).toFixed(2)).toLocaleString('en', {
-              minimumFractionDigits: 2
-            }) + ` tons` + `</h4>`;
+            minimumFractionDigits: 2
+          }) + ` tons` + `</h4>`;
 
         // Ensure that if the map is zoomed out such that multiple
         // copies of the feature are visible, the popup appears
@@ -325,36 +328,7 @@
         map.getCanvas().style.cursor = '';
       });
 
-    });
 
-
-    const checkboxes = document.querySelectorAll("input[type=checkbox]");
-    checkboxes.forEach(checkbox => {
-      checkbox.addEventListener("change", () => {
-        filterFeatures();
-      });
-    });
-
-    function filterFeatures() {
-      // Get all checked checkboxes
-      const checkedboxes = document.querySelectorAll('input:checked');
-      // Create an array of types from the checked checkboxes
-      const types = [];
-      checkedboxes.forEach((checkbox) => {
-        types.push(checkbox.value);
-      });
-
-      // Construct the filter expression using the array of types
-      let filter = ['in', 'TYPE'];
-      types.forEach((type) => {
-        filter.push(type);
-      });
-
-      // Set the map's filter
-      map.setFilter('csvData', filter);
-    };
-
-    $(document).ready(function () {
       $.ajax({
         type: "GET",
         //YOUR TURN: Replace with csv export link
@@ -396,8 +370,37 @@
           }
         });
       };
+
     });
+
+
+    const checkboxes = document.querySelectorAll("input[type=checkbox]");
+    checkboxes.forEach(checkbox => {
+      checkbox.addEventListener("change", () => {
+        filterFeatures();
+      });
+    });
+
+    function filterFeatures() {
+      // Get all checked checkboxes
+      const checkedboxes = document.querySelectorAll('input:checked');
+      // Create an array of types from the checked checkboxes
+      const types = [];
+      checkedboxes.forEach((checkbox) => {
+        types.push(checkbox.value);
+      });
+
+      // Construct the filter expression using the array of types
+      let filter = ['in', 'TYPE'];
+      types.forEach((type) => {
+        filter.push(type);
+      });
+
+      // Set the map's filter
+      map.setFilter('csvData', filter);
+    };
   </script>
 
 </body>
+
 </html>
