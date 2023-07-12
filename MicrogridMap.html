@@ -328,9 +328,10 @@
               fuel = title(type);
 
               var description =
-                `<h3>` + e.features[0].properties.NAME + `</h3>` + '<hr />' //+
-                // `\n<h4>` + `<b>` + `Location: ` + `</b>` + e.features[0].properties.COUNTY + ` County` +
-                // `, ` + e.features[0].properties.STATE + `</h4>` +
+                `<h3>` + e.features[0].properties.NAME + `</h3>` + '<hr />' +
+                `\n<h4>` + `<b>` + `Type: ` + `</b>` + e.features[0].properties.TYPE //+ ` County` +
+                // `, ` + e.features[0].properties.STATE + 
+                `</h4>` +
                 // `\n<h4>` + `<b>` + `Fuel Type: ` + `</b>` + fuel + `</h4>` +
                 // `\n<h4>` + `<b>` + `Capacity: ` + `</b>` + Number(parseFloat(e.features[0].properties
                 //   .MW).toFixed(2)).toLocaleString('en', {
