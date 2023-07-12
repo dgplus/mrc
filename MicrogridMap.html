@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset='utf-8' />
+  <title></title>
+  <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
+  <script src='https://api.mapbox.com/mapbox-gl-js/v2.0.1/mapbox-gl.js'></script>
+  <link href='https://api.mapbox.com/mapbox-gl-js/v2.0.1/mapbox-gl.css' rel='stylesheet' />
+  <script src='https://npmcdn.com/csv2geojson@latest/csv2geojson.js'></script>
+  <script src='https://npmcdn.com/@turf/turf/turf.min.js'></script>
+  <link href="https://dgplus.github.io/maps/css/map-styles.css" rel="stylesheet">
+  <style>
+    .map-overlay {
+      width: auto;
+    }
+
+    h4 {
+      padding-bottom: 0px;
+    }
+
+    .mapboxgl-popup-content {
+      white-space: nowrap;
+      width: fit-content !important;
+    }
+  </style>
+  
+</head>
+
+<body>
+
+  <div id="mapcontainer">
+    <div id="map"></div>
+    <div id="legend"></div>
+    <div class="map-overlay top">
+      <div class="map-overlay-inner">
+        <h3>Microgrids <br> in the US</h3>
+        <div class='menu'>
+          <strong>Show/Hide Features</strong>
+          <hr />
+          <label class='menu-item'>
+            <input type='checkbox' id='School' value='School' checked />
+            School
+          </label>
+          <label class='menu-item'>
+            <input type='checkbox' id='Military' value='Military' checked />
+            Military
+          </label>
+          <label class='menu-item'>
+            <input type='checkbox' id='Research Facility' value='Research Facility' checked />
+            Research Facility
+          </label>
+          <label class='menu-item'>
+            <input type='checkbox' id='Water Treatment Utility' value='Water Treatment Utility' checked />
+            Water Treatment Utility
+          </label>
+          <label class='menu-item'>
+            <input type='checkbox' id='Commercial' value='Commercial' checked />
+            Commercial
+          </label>
+          <label class='menu-item'>
+            <input type='checkbox' id='City or Community' value='City or Community' checked />
+            City or Community
+          </label>
+          <label class='menu-item'>
+            <input type='checkbox' id='Public Institution' value='Public Institution' checked />
+            Public Institution
+          </label>
+          <label class='menu-item'>
+            <input type='checkbox' id='Agriculture' value='Agriculture' checked />
+            Agriculture
+          </label>
+          <label class='menu-item'>
+            <input type='checkbox' id='Hospital or Healthcare' value='Hospital or Healthcare' checked />
+            Hospital or Healthcare
+          </label>
+        </div>
+      </div>
+    </div>
+    <div id="fullscreen">Full screen</div>
+  </div>
+
+  <script>
+    const fullscreen = document.getElementById('fullscreen');
+    var transformRequest = (url, resourceType) => {
+      var isMapboxRequest =
+        url.slice(8, 22) === "api.mapbox.com" ||
+        url.slice(10, 26) === "tiles.mapbox.com";
+      return {
+        url: isMapboxRequest ?
+          url.replace("?", "?pluginName=sheetMapper&") : url
+      };
+    };
+
+    const bounds = [
+      [-217.61932, -32.38898], // Southwest coordinates
+      [-1.70188, 82.70255] // Northeast coordinates
+    ];
+
+    //YOUR TURN: add your Mapbox token
+    mapboxgl.accessToken =
+      'pk.eyJ1IjoiZGdwbHVzZGVzaWduIiwiYSI6ImNsZTF2bmZnbzBoeGkzb28yOW5kemF0ZHEifQ.wcLBXkbgle9WkYCnzSM8Cw'; //Mapbox token 
+    var map = new mapboxgl.Map({
+      container: 'map', // container id
+      style: 'mapbox://styles/mapbox/light-v11', // YOUR TURN: choose a style: https://docs.mapbox.com/api/maps/#styles
+      center: {
+        lng: -130.664,
+        lat: 51.258,
+      }, // starting position [lng, lat]
+      zoom: 3.5, // starting zoom
+      minZoom: 2.2,
+      maxBounds: bounds,
+      transformRequest: transformRequest
+    });
+
+    const checkboxes = document.querySelectorAll("input[type=checkbox]");
+    checkboxes.forEach(checkbox => {
+      checkbox.addEventListener("change", () => {
+        filterFeatures();
+      });
+    });
+
+    function filterFeatures() {
+      // Get all checked checkboxes
+      const checkedboxes = document.querySelectorAll('input:checked');
+      // Create an array of types from the checked checkboxes
+      const types = [];
+      checkedboxes.forEach((checkbox) => {
+        types.push(checkbox.value);
+      });
+
+      // Construct the filter expression using the array of types
+      let filter = ['in', 'TYPE'];
+      types.forEach((type) => {
+        filter.push(type);
+      });
+
+      // Set the map's filter
+      map.setFilter('csvData', filter);
+    };
+
+    $(document).ready(function () {
+      $.ajax({
+        type: "GET",
+        //YOUR TURN: Replace with csv export link
+        url: 'https://docs.google.com/spreadsheets/d/1kGLtYrPyL16MehhIog3oYZ329zI-nZsVVyss8mcb3Jk/gviz/tq?tqx=out:csv&sheet=Sheet1',
+        dataType: "text",
+        success: function (csvData) {
+          makeGeoJSON(csvData);
+        }
+      });
+
+      function makeGeoJSON(csvData) {
+        csv2geojson.csv2geojson(csvData, {
+          latfield: 'LAT',
+          lonfield: 'LON',
+          delimiter: ',',
+          //numericFields: 'MW,CARB,CARBRT',
+        }, function (err, geojson) {
+          data = geojson;
+          map.on('load', function () {
+
+            //Add the the layer to the map
+            map.addLayer({
+              'id': 'csvData',
+              'type': 'circle',
+              'source': {
+                'type': 'geojson',
+                'data': geojson
+              },
+              'paint': {
+                // 'circle-radius': [
+                //   "interpolate",
+                //   ["linear"],
+                //   ["zoom"],
+                //   0,
+                //   [
+                //     "interpolate",
+                //     ["exponential", 1],
+                //     ["get", "CARB"],
+                //     0,
+                //     2,
+                //     100,
+                //     3,
+                //     10000,
+                //     6,
+                //     100000,
+                //     8,
+                //     1000000,
+                //     10,
+                //     10000000,
+                //     12,
+                //     20000000,
+                //     15
+                //   ],
+                //   5,
+                //   [
+                //     "interpolate",
+                //     ["exponential", 1],
+                //     ["get", "CARB"],
+                //     0,
+                //     2,
+                //     100,
+                //     3,
+                //     10000,
+                //     6,
+                //     100000,
+                //     8,
+                //     1000000,
+                //     10,
+                //     10000000,
+                //     12,
+                //     20000000,
+                //     15
+                //   ],
+                //   10,
+                //   [
+                //     "interpolate",
+                //     ["exponential", 1],
+                //     ["get", "CARB"],
+                //     0,
+                //     2,
+                //     100,
+                //     3,
+                //     10000,
+                //     6,
+                //     100000,
+                //     8,
+                //     1000000,
+                //     10,
+                //     10000000,
+                //     12,
+                //     20000000,
+                //     15
+                //   ],
+                //   22,
+                //   [
+                //     "interpolate",
+                //     ["exponential", 1],
+                //     ["get", "CARB"],
+                //     0,
+                //     2,
+                //     100,
+                //     3,
+                //     10000,
+                //     6,
+                //     100000,
+                //     8,
+                //     1000000,
+                //     10,
+                //     10000000,
+                //     12,
+                //     20000000,
+                //     15
+                //   ]
+                // ],
+                'circle-color': [
+                  "match",
+                  ["get", "TYPE"],
+                  ["University"],
+                  "#b21fc8",
+                  ["Military"],
+                  "#71e5f5",
+                  ["Research Facility"],
+                  "#f4e158",
+                  ["Water Treatment Utility"],
+                  "#00d41e",
+                  ["Commercial"],
+                  "#679bfa",
+                  ["City or Community"],
+                  "#705747",
+                  ["Public Institution"],
+                  "#a8a8a8",
+                  ["Agriculture"],
+                  "#512ad1",
+                  ["Hospital or Healthcare"],
+                  "#db75fa",
+                  "#000000"
+                ],
+                'circle-opacity': 0.7,
+                'circle-stroke-color': [
+                  "match",
+                  ["get", "TYPE"],
+                  ["University"],
+                  "#b21fc8",
+                  ["Military"],
+                  "#71e5f5",
+                  ["Research Facility"],
+                  "#f4e158",
+                  ["Water Treatment Utility"],
+                  "#00d41e",
+                  ["Commercial"],
+                  "#679bfa",
+                  ["City or Community"],
+                  "#705747",
+                  ["Public Institution"],
+                  "#a8a8a8",
+                  ["Agriculture"],
+                  "#512ad1",
+                  ["Hospital or Healthcare"],
+                  "#db75fa",
+                  "#000000"
+                ],
+                'circle-stroke-width': 0.75
+              }
+            });
+
+            // When a click event occurs on a feature in the csvData layer, open a popup at the
+            // location of the feature, with description HTML from its properties.
+            map.on('click', 'csvData', function (e) {
+              var coordinates = e.features[0].geometry.coordinates.slice();
+
+              //set popup text
+              //You can adjust the values of the popup to match the headers of your CSV.
+              // For example: e.features[0].properties.Name is retrieving information from the field Name in the original CSV.
+
+              // Get the 'TYPE' property from the feature's properties
+              var type = String(e.features[0].properties.TYPE);
+
+              // Format the type string with first-letter-capitalization
+              title = function toTitleCase(type) {
+                return type.toLowerCase().split(' ').map(function (word) {
+                  return (word.charAt(0).toUpperCase() + word.slice(1));
+                }).join(' ');
+              };
+
+              fuel = title(type);
+
+              var description =
+                `<h3>` + e.features[0].properties.NAME + `</h3>` + '<hr />' //+
+                // `\n<h4>` + `<b>` + `Location: ` + `</b>` + e.features[0].properties.COUNTY + ` County` +
+                // `, ` + e.features[0].properties.STATE + `</h4>` +
+                // `\n<h4>` + `<b>` + `Fuel Type: ` + `</b>` + fuel + `</h4>` +
+                // `\n<h4>` + `<b>` + `Capacity: ` + `</b>` + Number(parseFloat(e.features[0].properties
+                //   .MW).toFixed(2)).toLocaleString('en', {
+                //   minimumFractionDigits: 2
+                // }) + ` MWs` + `</h4>` +
+                // `\n<h4>` + `<b>` + `Annual CO2 Emissions: ` + `</b>` + Number(parseFloat(e.features[0]
+                //   .properties.CARB).toFixed(2)).toLocaleString('en', {
+                //   minimumFractionDigits: 2
+                // }) + ` tons` + `</h4>`
+                ;
+
+              // Ensure that if the map is zoomed out such that multiple
+              // copies of the feature are visible, the popup appears
+              // over the copy being pointed to.
+              while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+                coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+              }
+
+              //add Popup to map
+
+              new mapboxgl.Popup()
+                .setLngLat(coordinates)
+                .setHTML(description)
+                .addTo(map);
+            });
+
+            // Change the cursor to a pointer when the mouse is over the places layer.
+            map.on('mouseenter', 'csvData', function () {
+              map.getCanvas().style.cursor = 'pointer';
+            });
+
+            // Change it back to a pointer when it leaves.
+            map.on('mouseleave', 'places', function () {
+              map.getCanvas().style.cursor = '';
+            });
+
+            var bbox = turf.bbox(geojson);
+            map.fitBounds(bbox, {
+              padding: 50
+            });
+
+          });
+
+          fullscreen.addEventListener('click', toggleFullscreen)
+
+          function toggleFullscreen() {
+            let elem = document.getElementById("mapcontainer");
+            if (!document.fullscreenElement) {
+              elem.requestFullscreen().catch((err) => {
+                alert(`Error attempting to enable fullscreen mode: ${err.message} (${err.name})`);
+              });
+            } else {
+              document.exitFullscreen();
+            }
+          }
+        });
+      };
+    });
+  </script>
+
+</body>
+
+</html>
