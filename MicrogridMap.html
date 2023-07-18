@@ -140,6 +140,38 @@
       map.setFilter('csvData', filter);
     };
 
+    function applyCollisionDetection() {
+  // Get the rendered features in the circle layer
+  const features = map.queryRenderedFeatures({ layers: ['csvData'] });
+
+  // Create an object to track the coordinates of features
+  const coordinatesMap = {};
+
+  // Iterate through the features and adjust their coordinates to prevent collision
+  features.forEach((feature) => {
+    const coordinates = feature.geometry.coordinates;
+    const key = `${coordinates[0]},${coordinates[1]}`;
+
+    if (coordinatesMap[key]) {
+      // Features with the same coordinates found, adjust their positions
+      const shift = 0.0001; // Adjust this value as needed
+      coordinates[0] += shift;
+      coordinates[1] += shift;
+    }
+
+    coordinatesMap[key] = true;
+  });
+
+  // Update the Mapbox GL JS source with the modified features
+  const source = map.getSource('geojson');
+  if (source) {
+    source.setData({
+      type: 'FeatureCollection',
+      features: features
+    });
+  }
+}
+
     $(document).ready(function () {
       $.ajax({
         type: "GET",
