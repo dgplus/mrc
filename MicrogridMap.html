@@ -25,20 +25,6 @@
       width: fit-content !important;
     }
 
-    #info {
-      display: table;
-      position: relative;
-      margin: 0px auto;
-      word-wrap: anywhere;
-      white-space: pre-wrap;
-      padding: 10px;
-      border: none;
-      border-radius: 3px;
-      font-size: 12px;
-      text-align: center;
-      color: #222;
-      background: #fff;
-    }
   </style>
 
 </head>
@@ -47,7 +33,6 @@
 
   <div id="mapcontainer">
     <div id="map"></div>
-    <pre id="info"></pre>
     <div id="legend"></div>
     <div class="map-overlay top">
       <div class="map-overlay-inner">
@@ -146,17 +131,6 @@
       maxBounds: bounds,
       transformRequest: transformRequest
     });
-
-    map.on('mousemove', (e) => {
-document.getElementById('info').innerHTML =
-// `e.point` is the x, y coordinates of the `mousemove` event
-// relative to the top-left corner of the map.
-JSON.stringify(e.point) +
-'<br />' +
-// `e.lngLat` is the longitude, latitude geographical position of the event.
-JSON.stringify(e.lngLat.wrap());
-});
-
 
     const checkboxes = document.querySelectorAll("input[type=checkbox]");
     checkboxes.forEach(checkbox => {
