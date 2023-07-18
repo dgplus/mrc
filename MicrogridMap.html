@@ -25,7 +25,7 @@
       width: fit-content !important;
     }
   </style>
-  
+
 </head>
 
 <body>
@@ -110,8 +110,8 @@
     };
 
     const bounds = [
-    [-150.7241433857995, 21.357002122461935], // Southwest coordinates
-    [-50.22971536386672, 52.6633722517840] // Northeast coordinates
+      [-217.61932, -32.38898], // Southwest coordinates
+      [-1.70188, 82.70255] // Northeast coordinates
     ];
 
     //YOUR TURN: add your Mapbox token
@@ -157,36 +157,38 @@
     };
 
     function applyCollisionDetection() {
-  // Get the rendered features in the circle layer
-  const features = map.queryRenderedFeatures({ layers: ['csvData'] });
+      // Get the rendered features in the circle layer
+      const features = map.queryRenderedFeatures({
+        layers: ['csvData']
+      });
 
-  // Create an object to track the coordinates of features
-  const coordinatesMap = {};
+      // Create an object to track the coordinates of features
+      const coordinatesMap = {};
 
-  // Iterate through the features and adjust their coordinates to prevent collision
-  features.forEach((feature) => {
-    const coordinates = feature.geometry.coordinates;
-    const key = `${coordinates[0]},${coordinates[1]}`;
+      // Iterate through the features and adjust their coordinates to prevent collision
+      features.forEach((feature) => {
+        const coordinates = feature.geometry.coordinates;
+        const key = `${coordinates[0]},${coordinates[1]}`;
 
-    if (coordinatesMap[key]) {
-      // Features with the same coordinates found, adjust their positions
-      const shift = 0.0001; // Adjust this value as needed
-      coordinates[0] += shift;
-      coordinates[1] += shift;
+        if (coordinatesMap[key]) {
+          // Features with the same coordinates found, adjust their positions
+          const shift = 0.0001; // Adjust this value as needed
+          coordinates[0] += shift;
+          coordinates[1] += shift;
+        }
+
+        coordinatesMap[key] = true;
+      });
+
+      // Update the Mapbox GL JS source with the modified features
+      const source = map.getSource('geojson');
+      if (source) {
+        source.setData({
+          type: 'FeatureCollection',
+          features: features
+        });
+      }
     }
-
-    coordinatesMap[key] = true;
-  });
-
-  // Update the Mapbox GL JS source with the modified features
-  const source = map.getSource('geojson');
-  if (source) {
-    source.setData({
-      type: 'FeatureCollection',
-      features: features
-    });
-  }
-}
 
     $(document).ready(function () {
       $.ajax({
@@ -378,16 +380,16 @@
               var description =
                 `<h3>` + e.features[0].properties.NAME + `</h3>` + '<hr />' +
                 `\n<h4>` + `<b>` + `Application: ` + `</b>` + e.features[0].properties.TYPE + `</h4>`
-                // `\n<h4>` + `<b>` + `Fuel Type: ` + `</b>` + fuel + `</h4>` +
-                // `\n<h4>` + `<b>` + `Capacity: ` + `</b>` + Number(parseFloat(e.features[0].properties
-                //   .MW).toFixed(2)).toLocaleString('en', {
-                //   minimumFractionDigits: 2
-                // }) + ` MWs` + `</h4>` +
-                // `\n<h4>` + `<b>` + `Annual CO2 Emissions: ` + `</b>` + Number(parseFloat(e.features[0]
-                //   .properties.CARB).toFixed(2)).toLocaleString('en', {
-                //   minimumFractionDigits: 2
-                // }) + ` tons` + `</h4>`
-                ;
+              // `\n<h4>` + `<b>` + `Fuel Type: ` + `</b>` + fuel + `</h4>` +
+              // `\n<h4>` + `<b>` + `Capacity: ` + `</b>` + Number(parseFloat(e.features[0].properties
+              //   .MW).toFixed(2)).toLocaleString('en', {
+              //   minimumFractionDigits: 2
+              // }) + ` MWs` + `</h4>` +
+              // `\n<h4>` + `<b>` + `Annual CO2 Emissions: ` + `</b>` + Number(parseFloat(e.features[0]
+              //   .properties.CARB).toFixed(2)).toLocaleString('en', {
+              //   minimumFractionDigits: 2
+              // }) + ` tons` + `</h4>`
+              ;
 
               // Ensure that if the map is zoomed out such that multiple
               // copies of the feature are visible, the popup appears
