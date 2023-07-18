@@ -115,16 +115,6 @@
 
   <script>
 
-map.on('mousemove', (e) => {
-document.getElementById('info').innerHTML =
-// `e.point` is the x, y coordinates of the `mousemove` event
-// relative to the top-left corner of the map.
-JSON.stringify(e.point) +
-'<br />' +
-// `e.lngLat` is the longitude, latitude geographical position of the event.
-JSON.stringify(e.lngLat.wrap());
-});
-
     const fullscreen = document.getElementById('fullscreen');
     var transformRequest = (url, resourceType) => {
       var isMapboxRequest =
@@ -156,6 +146,17 @@ JSON.stringify(e.lngLat.wrap());
       maxBounds: bounds,
       transformRequest: transformRequest
     });
+
+    map.on('mousemove', (e) => {
+document.getElementById('info').innerHTML =
+// `e.point` is the x, y coordinates of the `mousemove` event
+// relative to the top-left corner of the map.
+JSON.stringify(e.point) +
+'<br />' +
+// `e.lngLat` is the longitude, latitude geographical position of the event.
+JSON.stringify(e.lngLat.wrap());
+});
+
 
     const checkboxes = document.querySelectorAll("input[type=checkbox]");
     checkboxes.forEach(checkbox => {
