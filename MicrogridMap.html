@@ -24,7 +24,6 @@
       white-space: nowrap;
       width: fit-content !important;
     }
-
   </style>
 
 </head>
@@ -99,7 +98,6 @@
   </div>
 
   <script>
-
     const fullscreen = document.getElementById('fullscreen');
     var transformRequest = (url, resourceType) => {
       var isMapboxRequest =
@@ -222,91 +220,91 @@
                 'data': geojson
               },
               'paint': {
-                // 'circle-radius': [
-                //   "interpolate",
-                //   ["linear"],
-                //   ["zoom"],
-                //   0,
-                //   [
-                //     "interpolate",
-                //     ["exponential", 1],
-                //     ["get", "CARB"],
-                //     0,
-                //     2,
-                //     100,
-                //     3,
-                //     10000,
-                //     6,
-                //     100000,
-                //     8,
-                //     1000000,
-                //     10,
-                //     10000000,
-                //     12,
-                //     20000000,
-                //     15
-                //   ],
-                //   5,
-                //   [
-                //     "interpolate",
-                //     ["exponential", 1],
-                //     ["get", "CARB"],
-                //     0,
-                //     2,
-                //     100,
-                //     3,
-                //     10000,
-                //     6,
-                //     100000,
-                //     8,
-                //     1000000,
-                //     10,
-                //     10000000,
-                //     12,
-                //     20000000,
-                //     15
-                //   ],
-                //   10,
-                //   [
-                //     "interpolate",
-                //     ["exponential", 1],
-                //     ["get", "CARB"],
-                //     0,
-                //     2,
-                //     100,
-                //     3,
-                //     10000,
-                //     6,
-                //     100000,
-                //     8,
-                //     1000000,
-                //     10,
-                //     10000000,
-                //     12,
-                //     20000000,
-                //     15
-                //   ],
-                //   22,
-                //   [
-                //     "interpolate",
-                //     ["exponential", 1],
-                //     ["get", "CARB"],
-                //     0,
-                //     2,
-                //     100,
-                //     3,
-                //     10000,
-                //     6,
-                //     100000,
-                //     8,
-                //     1000000,
-                //     10,
-                //     10000000,
-                //     12,
-                //     20000000,
-                //     15
-                //   ]
-                // ],
+                'circle-radius': [
+                  "interpolate",
+                  ["linear"],
+                  ["zoom"],
+                  0,
+                  [
+                    "interpolate",
+                    ["exponential", 1],
+                    ["get", "CAPKW"],
+                    0,
+                    2,
+                    25,
+                    3,
+                    50,
+                    6,
+                    75,
+                    8,
+                    100,
+                    10,
+                    500,
+                    12,
+                    1000,
+                    15
+                  ],
+                  5,
+                  [
+                    "interpolate",
+                    ["exponential", 1],
+                    ["get", "CAPKW"],
+                    0,
+                    2,
+                    25,
+                    3,
+                    50,
+                    6,
+                    75,
+                    8,
+                    100,
+                    10,
+                    500,
+                    12,
+                    1000,
+                    15
+                  ],
+                  10,
+                  [
+                    "interpolate",
+                    ["exponential", 1],
+                    ["get", "CAPKW"],
+                    0,
+                    2,
+                    25,
+                    3,
+                    50,
+                    6,
+                    75,
+                    8,
+                    100,
+                    10,
+                    500,
+                    12,
+                    1000,
+                    15
+                  ],
+                  22,
+                  [
+                    "interpolate",
+                    ["exponential", 1],
+                    ["get", "CAPKW"],
+                    0,
+                    2,
+                    25,
+                    3,
+                    50,
+                    6,
+                    75,
+                    8,
+                    100,
+                    10,
+                    500,
+                    12,
+                    1000,
+                    15
+                  ]
+                ],
                 'circle-color': [
                   "match",
                   ["get", "TYPE"],
@@ -381,8 +379,8 @@
 
               var description =
                 `<h3>` + e.features[0].properties.NAME + `</h3>` + '<hr />' +
-                `\n<h4>` + `<b>` + `Application: ` + `</b>` + e.features[0].properties.TYPE + `</h4>`
-              // `\n<h4>` + `<b>` + `Fuel Type: ` + `</b>` + fuel + `</h4>` +
+                `\n<h4>` + `<b>` + `Application: ` + `</b>` + e.features[0].properties.TYPE + `</h4>` +
+                `\n<h4>` + `<b>` + `Capacity: ` + `</b>` + e.features[0].properties.CAPTXT + `</h4>` +
               // `\n<h4>` + `<b>` + `Capacity: ` + `</b>` + Number(parseFloat(e.features[0].properties
               //   .MW).toFixed(2)).toLocaleString('en', {
               //   minimumFractionDigits: 2
