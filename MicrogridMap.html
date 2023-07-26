@@ -234,15 +234,15 @@
                     25,
                     3,
                     50,
-                    6,
+                    5,
                     75,
-                    8,
+                    7,
                     100,
-                    10,
+                    8,
                     500,
-                    12,
+                    10,
                     1000,
-                    15
+                    12
                   ],
                   5,
                   [
@@ -254,15 +254,15 @@
                     25,
                     3,
                     50,
-                    6,
+                    5,
                     75,
-                    8,
+                    7,
                     100,
-                    10,
+                    8,
                     500,
-                    12,
+                    10,
                     1000,
-                    15
+                    12
                   ],
                   10,
                   [
@@ -274,15 +274,15 @@
                     25,
                     3,
                     50,
-                    6,
+                    5,
                     75,
-                    8,
+                    7,
                     100,
-                    10,
+                    8,
                     500,
-                    12,
+                    10,
                     1000,
-                    15
+                    12
                   ],
                   22,
                   [
@@ -294,15 +294,15 @@
                     25,
                     3,
                     50,
-                    6,
+                    5,
                     75,
-                    8,
+                    7,
                     100,
-                    10,
+                    8,
                     500,
-                    12,
+                    10,
                     1000,
-                    15
+                    12
                   ]
                 ],
                 'circle-color': [
@@ -368,19 +368,20 @@
               // Get the 'TYPE' property from the feature's properties
               var type = String(e.features[0].properties.TYPE);
 
-              // Format the type string with first-letter-capitalization
-              title = function toTitleCase(type) {
-                return type.toLowerCase().split(' ').map(function (word) {
-                  return (word.charAt(0).toUpperCase() + word.slice(1));
-                }).join(' ');
-              };
+              // // Format the type string with first-letter-capitalization
+              // title = function toTitleCase(type) {
+              //   return type.toLowerCase().split(' ').map(function (word) {
+              //     return (word.charAt(0).toUpperCase() + word.slice(1));
+              //   }).join(' ');
+              // };
 
-              fuel = title(type);
+              //fuel = title(type);
 
               var description =
                 `<h3>` + e.features[0].properties.NAME + `</h3>` + '<hr />' +
                 `\n<h4>` + `<b>` + `Application: ` + `</b>` + e.features[0].properties.TYPE + `</h4>` +
-                `\n<h4>` + `<b>` + `Location: ` + `</b>` + e.features[0].properties.CITY + ', ' + e.features[0].properties.STATE `</h4>` +
+                `\n<h4>` + `<b>` + `Location: ` + `</b>` + e.features[0].properties.CITY + ', ' + e
+                .features[0].properties.STATE `</h4>` +
                 `\n<h4>` + `<b>` + `Capacity: ` + `</b>` + e.features[0].properties.CAPTXT + `</h4>`
               // `\n<h4>` + `<b>` + `Capacity: ` + `</b>` + Number(parseFloat(e.features[0].properties
               //   .MW).toFixed(2)).toLocaleString('en', {
