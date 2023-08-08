@@ -30,6 +30,7 @@
 
 <body>
 
+
   <div id="mapcontainer">
     <div id="map"></div>
     <div id="legend"></div>
@@ -40,55 +41,55 @@
           <strong>Show/Hide Features</strong>
           <hr />
           <label class='menu-item'>
-            <input type='checkbox' id='Multi-Family' value='Multi-Family' checked />
+            <input type='checkbox' id='Multi-Family' value='Multi-Family' color= '#000000' checked />
             Multi-Family
           </label>
           <label class='menu-item'>
-            <input type='checkbox' id='Schools' value='Schools' checked />
+            <input type='checkbox' id='Schools' value='Schools' color= '#000000' checked />
             Schools
           </label>
           <label class='menu-item'>
-            <input type='checkbox' id='College/University' value='College/University' checked />
+            <input type='checkbox' id='College/University' value='College/University' color= '#b21fc8' checked />
             College/University
           </label>
           <label class='menu-item'>
-            <input type='checkbox' id='Military' value='Military' checked />
+            <input type='checkbox' id='Military' value='Military' color= '#71e5f5' checked />
             Military
           </label>
           <label class='menu-item'>
-            <input type='checkbox' id='Research Facility' value='Research Facility' checked />
+            <input type='checkbox' id='Research Facility' value='Research Facility' color= '#f4e158' checked />
             Research Facility
           </label>
           <label class='menu-item'>
-            <input type='checkbox' id='Water Treatment/Utility' value='Water Treatment/Utility' checked />
+            <input type='checkbox' id='Water Treatment/Utility' value='Water Treatment/Utility' color= '#00d41e' checked />
             Water Treatment/Utility
           </label>
           <label class='menu-item'>
-            <input type='checkbox' id='Commercial' value='Commercial' checked />
+            <input type='checkbox' id='Commercial' value='Commercial' color= '#679bfa' checked />
             Commercial
           </label>
           <label class='menu-item'>
-            <input type='checkbox' id='City/Community' value='City/Community' checked />
+            <input type='checkbox' id='City/Community' value='City/Community' color= '#705747' checked />
             City/Community
           </label>
           <label class='menu-item'>
-            <input type='checkbox' id='Public Institution' value='Public Institution' checked />
+            <input type='checkbox' id='Public Institution' value='Public Institution' color= '#a8a8a8' checked />
             Public Institution
           </label>
           <label class='menu-item'>
-            <input type='checkbox' id='Agriculture' value='Agriculture' checked />
+            <input type='checkbox' id='Agriculture' value='Agriculture' color= '#512ad1' checked />
             Agriculture
           </label>
           <label class='menu-item'>
-            <input type='checkbox' id='Hospitals/Healthcare' value='Hospitals/Healthcare' checked />
+            <input type='checkbox' id='Hospitals/Healthcare' value='Hospitals/Healthcare' color= '#db75fa' checked />
             Hospitals/Healthcare
           </label>
           <label class='menu-item'>
-            <input type='checkbox' id='Airport' value='Airport' checked />
+            <input type='checkbox' id='Airport' value='Airport' color= '#000000' checked />
             Airport
           </label>
           <label class='menu-item'>
-            <input type='checkbox' id='Other' value='Other' checked />
+            <input type='checkbox' id='Other' value='Other' color= '#000000' checked />
             Other
           </label>
         </div>
@@ -156,7 +157,7 @@
       map.setFilter('csvData', filter);
 
       applyCollisionDetection();
-      
+
     };
 
     function applyCollisionDetection() {
