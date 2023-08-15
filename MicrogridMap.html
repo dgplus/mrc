@@ -25,43 +25,43 @@
       width: fit-content !important;
     }
 
-    #Multi-Family:checked{
+    #Multi-Family:checked {
       accent-color: #d96262;
     }
 
-    #Military:checked{
+    #Military:checked {
       accent-color: #71e5f5;
     }
 
-    #ResearchFacility:checked{
+    #ResearchFacility:checked {
       accent-color: #f4e158;
     }
 
-    #WaterTreatmentUtility:checked{
+    #WaterTreatmentUtility:checked {
       accent-color: #00d41e;
     }
 
-    #Commercial:checked{
+    #Commercial:checked {
       accent-color: #679bfa;
     }
 
-    #CityCommunity:checked{
+    #CityCommunity:checked {
       accent-color: #705747;
     }
 
-    #PublicInstitution:checked{
+    #PublicInstitution:checked {
       accent-color: #a8a8a8;
     }
 
-    #Agriculture:checked{
+    #Agriculture:checked {
       accent-color: #512ad1;
     }
 
-    #HospitalsHealthcare:checked{
+    #HospitalsHealthcare:checked {
       accent-color: #db75fa;
     }
 
-    #Other:checked{
+    #Other:checked {
       accent-color: #000000;
     }
   </style>
@@ -101,7 +101,7 @@
           <strong>Show/Hide Features</strong>
           <hr />
           <label class='menu-item'>
-            <input type='checkbox' id='Multi-Family' value='Multi-Family'  checked />
+            <input type='checkbox' id='Multi-Family' value='Multi-Family' checked />
             Multi-Family
           </label>
           <label class='menu-item'>
@@ -420,89 +420,159 @@
               }
             });
 
-            // When a click event occurs on a feature in the csvData layer, open a popup at the
-            // location of the feature, with description HTML from its properties.
-            map.on('click', 'csvData', function (e) {
-              var coordinates = e.features[0].geometry.coordinates.slice();
+            const checkboxes = document.querySelectorAll("input[type=checkbox]");
+            const popup = new mapboxgl.Popup({
+              closeButton: false,
+              closeOnClick: false,
+            });
 
-              //set popup text
-              //You can adjust the values of the popup to match the headers of your CSV.
-              // For example: e.features[0].properties.Name is retrieving information from the field Name in the original CSV.
+            checkboxes.forEach(checkbox => {
+              checkbox.addEventListener("mouseover", (event) => {
+                const featureType = event.target.value;
+                const featureDescription = getFeatureDescription(
+                  featureType); // Define this function to get feature descriptions
 
-              // Get the 'TYPE' property from the feature's properties
-              var type = String(e.features[0].properties.TYPE);
+                if (featureDescription) {
+                  popup.setLngLat(map.getCenter())
+                    .setHTML(featureDescription)
+                    .addTo(map);
+                }
+              });
 
-              // // Format the type string with first-letter-capitalization
-              // title = function toTitleCase(type) {
-              //   return type.toLowerCase().split(' ').map(function (word) {
-              //     return (word.charAt(0).toUpperCase() + word.slice(1));
-              //   }).join(' ');
-              // };
+              checkbox.addEventListener("mouseout", () => {
+                popup.remove();
+              });
 
-              //fuel = title(type);
+              checkbox.addEventListener("change", () => {
+                filterFeatures();
+              });
+            });
 
-              var description =
-                `<h3>` + e.features[0].properties.NAME + `</h3>` + '<hr />' +
-                `\n<h4>` + `<b>` + `Application: ` + `</b>` + e.features[0].properties.TYPE + `</h4>` +
-                `\n<h4>` + `<b>` + `Location: ` + `</b>` + e.features[0].properties.CITY + ', ' + e
-                .features[0].properties.STATE + `</h4>` +
-                `\n<h4>` + `<b>` + `Capacity: ` + `</b>` + e.features[0].properties.CAPTXT + `</h4>`
-              // `\n<h4>` + `<b>` + `Capacity: ` + `</b>` + Number(parseFloat(e.features[0].properties
-              //   .MW).toFixed(2)).toLocaleString('en', {
-              //   minimumFractionDigits: 2
-              // }) + ` MWs` + `</h4>` +
-              // `\n<h4>` + `<b>` + `Annual CO2 Emissions: ` + `</b>` + Number(parseFloat(e.features[0]
-              //   .properties.CARB).toFixed(2)).toLocaleString('en', {
-              //   minimumFractionDigits: 2
-              // }) + ` tons` + `</h4>`
-              ;
+            // Rest of your existing code...
 
-              // Ensure that if the map is zoomed out such that multiple
-              // copies of the feature are visible, the popup appears
-              // over the copy being pointed to.
-              while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-                coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+            // Define the getFeatureDescription function here
+            function getFeatureDescription(featureType) {
+              // Define and return descriptions for each feature type
+              // You can use a switch statement, if-else, or an object to map feature types to descriptions
+              // For example:
+              switch (featureType) {
+                case "Multi-Family":
+                  return "Multi-family, public, and afforable housing.";
+                case "Schools":
+                  return "Preschools and kindergartens, middle schools, and high schools.";
+                case "College/University":
+                  return "Colleges and universities.";
+                case "Military":
+                  return "Military bases, facilities, and training centers.";
+                case "Research Facility":
+                  return "Laboratories and other research facilities.";
+                case "Water Treatment/Utility":
+                  return "Water treatment facilities and other utilities.";
+                case "Commercial":
+                  return "Commercial facilities such as places of business or restaurants.";
+                case "City/Community":
+                  return "Cities, communities, and other kinds of municipalities.";
+                case "Public Institution":
+                  return "Public institutions like firehouses, police stations, and libraries.";
+                case "Agriculture":
+                  return "Agricultural land like farms or processing facilities.";
+                case "Hospitals/Healthcare":
+                  return "Hospitals and other healthcare facilities.";
+                case "Airport":
+                  return "Airports and other aviation-related facilities.";
+                case "Other":
+                  return "Other types of facilities.";
+                  // Add other cases here...
+                default:
+                  return "Hover over a checkbox to see more information.";
               }
-
-              //add Popup to map
-
-              new mapboxgl.Popup()
-                .setLngLat(coordinates)
-                .setHTML(description)
-                .addTo(map);
-            });
-
-            // Change the cursor to a pointer when the mouse is over the places layer.
-            map.on('mouseenter', 'csvData', function () {
-              map.getCanvas().style.cursor = 'pointer';
-            });
-
-            // Change it back to a pointer when it leaves.
-            map.on('mouseleave', 'places', function () {
-              map.getCanvas().style.cursor = '';
-            });
-
-            var bbox = turf.bbox(geojson);
-            map.fitBounds(bbox, {
-              padding: 50
-            });
-
+            }
           });
 
-          fullscreen.addEventListener('click', toggleFullscreen)
 
-          function toggleFullscreen() {
-            let elem = document.getElementById("mapcontainer");
-            if (!document.fullscreenElement) {
-              elem.requestFullscreen().catch((err) => {
-                alert(`Error attempting to enable fullscreen mode: ${err.message} (${err.name})`);
-              });
-            } else {
-              document.exitFullscreen();
+          // When a click event occurs on a feature in the csvData layer, open a popup at the
+          // location of the feature, with description HTML from its properties.
+          map.on('click', 'csvData', function (e) {
+            var coordinates = e.features[0].geometry.coordinates.slice();
+
+            //set popup text
+            //You can adjust the values of the popup to match the headers of your CSV.
+            // For example: e.features[0].properties.Name is retrieving information from the field Name in the original CSV.
+
+            // Get the 'TYPE' property from the feature's properties
+            var type = String(e.features[0].properties.TYPE);
+
+            // // Format the type string with first-letter-capitalization
+            // title = function toTitleCase(type) {
+            //   return type.toLowerCase().split(' ').map(function (word) {
+            //     return (word.charAt(0).toUpperCase() + word.slice(1));
+            //   }).join(' ');
+            // };
+
+            //fuel = title(type);
+
+            var description =
+              `<h3>` + e.features[0].properties.NAME + `</h3>` + '<hr />' +
+              `\n<h4>` + `<b>` + `Application: ` + `</b>` + e.features[0].properties.TYPE + `</h4>` +
+              `\n<h4>` + `<b>` + `Location: ` + `</b>` + e.features[0].properties.CITY + ', ' + e
+              .features[0].properties.STATE + `</h4>` +
+              `\n<h4>` + `<b>` + `Capacity: ` + `</b>` + e.features[0].properties.CAPTXT + `</h4>`
+            // `\n<h4>` + `<b>` + `Capacity: ` + `</b>` + Number(parseFloat(e.features[0].properties
+            //   .MW).toFixed(2)).toLocaleString('en', {
+            //   minimumFractionDigits: 2
+            // }) + ` MWs` + `</h4>` +
+            // `\n<h4>` + `<b>` + `Annual CO2 Emissions: ` + `</b>` + Number(parseFloat(e.features[0]
+            //   .properties.CARB).toFixed(2)).toLocaleString('en', {
+            //   minimumFractionDigits: 2
+            // }) + ` tons` + `</h4>`
+            ;
+
+            // Ensure that if the map is zoomed out such that multiple
+            // copies of the feature are visible, the popup appears
+            // over the copy being pointed to.
+            while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+              coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
             }
-          }
+
+            //add Popup to map
+
+            new mapboxgl.Popup()
+              .setLngLat(coordinates)
+              .setHTML(description)
+              .addTo(map);
+          });
+
+          // Change the cursor to a pointer when the mouse is over the places layer.
+          map.on('mouseenter', 'csvData', function () {
+            map.getCanvas().style.cursor = 'pointer';
+          });
+
+          // Change it back to a pointer when it leaves.
+          map.on('mouseleave', 'places', function () {
+            map.getCanvas().style.cursor = '';
+          });
+
+          var bbox = turf.bbox(geojson);
+          map.fitBounds(bbox, {
+            padding: 50
+          });
+
         });
-      };
+
+        fullscreen.addEventListener('click', toggleFullscreen)
+
+        function toggleFullscreen() {
+          let elem = document.getElementById("mapcontainer");
+          if (!document.fullscreenElement) {
+            elem.requestFullscreen().catch((err) => {
+              alert(`Error attempting to enable fullscreen mode: ${err.message} (${err.name})`);
+            });
+          } else {
+            document.exitFullscreen();
+          }
+        }
+      });
+    };
     });
   </script>
 
