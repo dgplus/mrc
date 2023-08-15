@@ -243,333 +243,341 @@
     }
 
     $(document).ready(function () {
-      $.ajax({
-        type: "GET",
-        //YOUR TURN: Replace with csv export link
-        url: 'https://docs.google.com/spreadsheets/d/133SkYCBc7m16YPLCDsfuCQz7-a_YJ6WoWH1gVfVfkYg/gviz/tq?tqx=out:csv&sheet=Sheet1',
-        dataType: "text",
-        success: function (csvData) {
-          makeGeoJSON(csvData);
-        }
-      });
-
-      function makeGeoJSON(csvData) {
-        csv2geojson.csv2geojson(csvData, {
-          latfield: 'LAT',
-          lonfield: 'LON',
-          delimiter: ',',
-          numericFields: 'CAPKW',
-        }, function (err, geojson) {
-          data = geojson;
-          map.on('load', function () {
-
-            //Add the the layer to the map
-            map.addLayer({
-              'id': 'csvData',
-              'type': 'circle',
-              'source': {
-                'type': 'geojson',
-                'data': geojson
-              },
-              'paint': {
-                'circle-radius': [
-                  "interpolate",
-                  ["linear"],
-                  ["zoom"],
-                  0,
-                  [
-                    "interpolate",
-                    ["exponential", 1],
-                    ["get", "CAPKW"],
-                    0,
-                    2,
-                    100,
-                    3,
-                    500,
-                    5,
-                    750,
-                    7,
-                    1000,
-                    8,
-                    5000,
-                    10,
-                    10000,
-                    12
-                  ],
-                  5,
-                  [
-                    "interpolate",
-                    ["exponential", 1],
-                    ["get", "CAPKW"],
-                    0,
-                    2,
-                    100,
-                    3,
-                    500,
-                    5,
-                    750,
-                    7,
-                    1000,
-                    8,
-                    5000,
-                    10,
-                    10000,
-                    12
-                  ],
-                  10,
-                  [
-                    "interpolate",
-                    ["exponential", 1],
-                    ["get", "CAPKW"],
-                    0,
-                    2,
-                    100,
-                    3,
-                    500,
-                    5,
-                    750,
-                    7,
-                    1000,
-                    8,
-                    5000,
-                    10,
-                    10000,
-                    12
-                  ],
-                  22,
-                  [
-                    "interpolate",
-                    ["exponential", 1],
-                    ["get", "CAPKW"],
-                    0,
-                    2,
-                    100,
-                    3,
-                    500,
-                    5,
-                    750,
-                    7,
-                    1000,
-                    8,
-                    5000,
-                    10,
-                    10000,
-                    12
-                  ]
-                ],
-                'circle-color': [
-                  "match",
-                  ["get", "TYPE"],
-                  ["College/University"],
-                  "#a7f364",
-                  ["Military"],
-                  "#71e5f5",
-                  ["Research Facility"],
-                  "#f4e158",
-                  ["Water Treatment/Utility"],
-                  "#00d41e",
-                  ["Commercial"],
-                  "#679bfa",
-                  ["City/Community"],
-                  "#705747",
-                  ["Public Institution"],
-                  "#a8a8a8",
-                  ["Agriculture"],
-                  "#512ad1",
-                  ["Hospitals/Healthcare"],
-                  "#db75fa",
-                  ["Airport"],
-                  "#af75fa",
-                  ["Multi-Family"],
-                  "#d96262",
-                  "#000000"
-                ],
-                'circle-opacity': 0.7,
-                'circle-stroke-color': [
-                  "match",
-                  ["get", "TYPE"],
-                  ["College/University"],
-                  "#a7f364",
-                  ["Military"],
-                  "#71e5f5",
-                  ["Research Facility"],
-                  "#f4e158",
-                  ["Water Treatment/Utility"],
-                  "#00d41e",
-                  ["Commercial"],
-                  "#679bfa",
-                  ["City/Community"],
-                  "#705747",
-                  ["Public Institution"],
-                  "#a8a8a8",
-                  ["Agriculture"],
-                  "#512ad1",
-                  ["Hospitals/Healthcare"],
-                  "#db75fa",
-                  ["Airport"],
-                  "#af75fa",
-                  ["Multi-Family"],
-                  "#d96262",
-                  "#000000"
-                ],
-                'circle-stroke-width': 0.75
-              }
-            });
-
-            const checkboxes = document.querySelectorAll("input[type=checkbox]");
-            const popup = new mapboxgl.Popup({
-              closeButton: false,
-              closeOnClick: false,
-            });
-
-            checkboxes.forEach(checkbox => {
-              checkbox.addEventListener("mouseenter", (event) => {
-                const featureType = event.target.value;
-                const featureDescription = getFeatureDescription(
-                featureType); // Define this function to get feature descriptions
-
-                if (featureDescription) {
-                  const lngLat = map.unproject([event.clientX, event.clientY]);
-                  popup.setLngLat(lngLat)
-                    .setHTML(featureDescription)
-                    .addTo(map);
-                }
-              });
-
-              checkbox.addEventListener("mouseout", () => {
-                popup.remove();
-              });
-
-              checkbox.addEventListener("change", () => {
-                filterFeatures();
-              });
-            });
-
-            // Rest of your existing code...
-
-            // Define the getFeatureDescription function here
-            function getFeatureDescription(featureType) {
-              // Define and return descriptions for each feature type
-              // You can use a switch statement, if-else, or an object to map feature types to descriptions
-              // For example:
-              switch (featureType) {
-                case "Multi-Family":
-                  return "Multi-family, public, and afforable housing.";
-                case "Schools":
-                  return "Preschools and kindergartens, middle schools, and high schools.";
-                case "College/University":
-                  return "Colleges and universities.";
-                case "Military":
-                  return "Military bases, facilities, and training centers.";
-                case "Research Facility":
-                  return "Laboratories and other research facilities.";
-                case "Water Treatment/Utility":
-                  return "Water treatment facilities and other utilities.";
-                case "Commercial":
-                  return "Commercial facilities such as places of business or restaurants.";
-                case "City/Community":
-                  return "Cities, communities, and other kinds of municipalities.";
-                case "Public Institution":
-                  return "Public institutions like firehouses, police stations, and libraries.";
-                case "Agriculture":
-                  return "Agricultural land like farms or processing facilities.";
-                case "Hospitals/Healthcare":
-                  return "Hospitals and other healthcare facilities.";
-                case "Airport":
-                  return "Airports and other aviation-related facilities.";
-                case "Other":
-                  return "Other types of facilities.";
-                  // Add other cases here...
-                default:
-                  return "Hover over a checkbox to see more information.";
-              }
+          $.ajax({
+            type: "GET",
+            //YOUR TURN: Replace with csv export link
+            url: 'https://docs.google.com/spreadsheets/d/133SkYCBc7m16YPLCDsfuCQz7-a_YJ6WoWH1gVfVfkYg/gviz/tq?tqx=out:csv&sheet=Sheet1',
+            dataType: "text",
+            success: function (csvData) {
+              makeGeoJSON(csvData);
             }
-
-
-            // When a click event occurs on a feature in the csvData layer, open a popup at the
-            // location of the feature, with description HTML from its properties.
-            map.on('click', 'csvData', function (e) {
-              var coordinates = e.features[0].geometry.coordinates.slice();
-
-              //set popup text
-              //You can adjust the values of the popup to match the headers of your CSV.
-              // For example: e.features[0].properties.Name is retrieving information from the field Name in the original CSV.
-
-              // Get the 'TYPE' property from the feature's properties
-              var type = String(e.features[0].properties.TYPE);
-
-              // // Format the type string with first-letter-capitalization
-              // title = function toTitleCase(type) {
-              //   return type.toLowerCase().split(' ').map(function (word) {
-              //     return (word.charAt(0).toUpperCase() + word.slice(1));
-              //   }).join(' ');
-              // };
-
-              //fuel = title(type);
-
-              var description =
-                `<h3>` + e.features[0].properties.NAME + `</h3>` + '<hr />' +
-                `\n<h4>` + `<b>` + `Application: ` + `</b>` + e.features[0].properties.TYPE + `</h4>` +
-                `\n<h4>` + `<b>` + `Location: ` + `</b>` + e.features[0].properties.CITY + ', ' + e
-                .features[0].properties.STATE + `</h4>` +
-                `\n<h4>` + `<b>` + `Capacity: ` + `</b>` + e.features[0].properties.CAPTXT + `</h4>`
-              // `\n<h4>` + `<b>` + `Capacity: ` + `</b>` + Number(parseFloat(e.features[0].properties
-              //   .MW).toFixed(2)).toLocaleString('en', {
-              //   minimumFractionDigits: 2
-              // }) + ` MWs` + `</h4>` +
-              // `\n<h4>` + `<b>` + `Annual CO2 Emissions: ` + `</b>` + Number(parseFloat(e.features[0]
-              //   .properties.CARB).toFixed(2)).toLocaleString('en', {
-              //   minimumFractionDigits: 2
-              // }) + ` tons` + `</h4>`
-              ;
-
-              // Ensure that if the map is zoomed out such that multiple
-              // copies of the feature are visible, the popup appears
-              // over the copy being pointed to.
-              while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-                coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
-              }
-
-              //add Popup to map
-
-              new mapboxgl.Popup()
-                .setLngLat(coordinates)
-                .setHTML(description)
-                .addTo(map);
-            });
-
-            // Change the cursor to a pointer when the mouse is over the places layer.
-            map.on('mouseenter', 'csvData', function () {
-              map.getCanvas().style.cursor = 'pointer';
-            });
-
-            // Change it back to a pointer when it leaves.
-            map.on('mouseleave', 'places', function () {
-              map.getCanvas().style.cursor = '';
-            });
-
-            var bbox = turf.bbox(geojson);
-            map.fitBounds(bbox, {
-              padding: 50
-            });
-
           });
 
-          fullscreen.addEventListener('click', toggleFullscreen)
+          function makeGeoJSON(csvData) {
+            csv2geojson.csv2geojson(csvData, {
+                latfield: 'LAT',
+                lonfield: 'LON',
+                delimiter: ',',
+                numericFields: 'CAPKW',
+              }, function (err, geojson) {
+                data = geojson;
+                map.on('load', function () {
 
-          function toggleFullscreen() {
-            let elem = document.getElementById("mapcontainer");
-            if (!document.fullscreenElement) {
-              elem.requestFullscreen().catch((err) => {
-                alert(`Error attempting to enable fullscreen mode: ${err.message} (${err.name})`);
-              });
-            } else {
-              document.exitFullscreen();
-            }
-          }
-        });
-      };
-    });
+                  //Add the the layer to the map
+                  map.addLayer({
+                    'id': 'csvData',
+                    'type': 'circle',
+                    'source': {
+                      'type': 'geojson',
+                      'data': geojson
+                    },
+                    'paint': {
+                      'circle-radius': [
+                        "interpolate",
+                        ["linear"],
+                        ["zoom"],
+                        0,
+                        [
+                          "interpolate",
+                          ["exponential", 1],
+                          ["get", "CAPKW"],
+                          0,
+                          2,
+                          100,
+                          3,
+                          500,
+                          5,
+                          750,
+                          7,
+                          1000,
+                          8,
+                          5000,
+                          10,
+                          10000,
+                          12
+                        ],
+                        5,
+                        [
+                          "interpolate",
+                          ["exponential", 1],
+                          ["get", "CAPKW"],
+                          0,
+                          2,
+                          100,
+                          3,
+                          500,
+                          5,
+                          750,
+                          7,
+                          1000,
+                          8,
+                          5000,
+                          10,
+                          10000,
+                          12
+                        ],
+                        10,
+                        [
+                          "interpolate",
+                          ["exponential", 1],
+                          ["get", "CAPKW"],
+                          0,
+                          2,
+                          100,
+                          3,
+                          500,
+                          5,
+                          750,
+                          7,
+                          1000,
+                          8,
+                          5000,
+                          10,
+                          10000,
+                          12
+                        ],
+                        22,
+                        [
+                          "interpolate",
+                          ["exponential", 1],
+                          ["get", "CAPKW"],
+                          0,
+                          2,
+                          100,
+                          3,
+                          500,
+                          5,
+                          750,
+                          7,
+                          1000,
+                          8,
+                          5000,
+                          10,
+                          10000,
+                          12
+                        ]
+                      ],
+                      'circle-color': [
+                        "match",
+                        ["get", "TYPE"],
+                        ["College/University"],
+                        "#a7f364",
+                        ["Military"],
+                        "#71e5f5",
+                        ["Research Facility"],
+                        "#f4e158",
+                        ["Water Treatment/Utility"],
+                        "#00d41e",
+                        ["Commercial"],
+                        "#679bfa",
+                        ["City/Community"],
+                        "#705747",
+                        ["Public Institution"],
+                        "#a8a8a8",
+                        ["Agriculture"],
+                        "#512ad1",
+                        ["Hospitals/Healthcare"],
+                        "#db75fa",
+                        ["Airport"],
+                        "#af75fa",
+                        ["Multi-Family"],
+                        "#d96262",
+                        "#000000"
+                      ],
+                      'circle-opacity': 0.7,
+                      'circle-stroke-color': [
+                        "match",
+                        ["get", "TYPE"],
+                        ["College/University"],
+                        "#a7f364",
+                        ["Military"],
+                        "#71e5f5",
+                        ["Research Facility"],
+                        "#f4e158",
+                        ["Water Treatment/Utility"],
+                        "#00d41e",
+                        ["Commercial"],
+                        "#679bfa",
+                        ["City/Community"],
+                        "#705747",
+                        ["Public Institution"],
+                        "#a8a8a8",
+                        ["Agriculture"],
+                        "#512ad1",
+                        ["Hospitals/Healthcare"],
+                        "#db75fa",
+                        ["Airport"],
+                        "#af75fa",
+                        ["Multi-Family"],
+                        "#d96262",
+                        "#000000"
+                      ],
+                      'circle-stroke-width': 0.75
+                    }
+                  });
+
+                  const menuItems = document.querySelectorAll(".menu-item");
+                  const popup = new mapboxgl.Popup({
+                    closeButton: false,
+                    closeOnClick: false,
+                  });
+
+                  menuItems.forEach(menuItem => {
+                    const checkbox = menuItem.querySelector("input[type=checkbox]");
+
+                    checkboxes.forEach(checkbox => {
+                      checkbox.addEventListener("mouseenter", (event) => {
+                        const featureType = event.target.value;
+                        const featureDescription = getFeatureDescription(
+                          featureType); // Define this function to get feature descriptions
+
+                        if (featureDescription) {
+                          const lngLat = map.unproject([event.clientX, event.clientY]);
+                          popup.setLngLat(lngLat)
+                            .setHTML(featureDescription)
+                            .addTo(map);
+                        }
+                      });
+                    }
+
+
+                      checkbox.addEventListener("mouseout", () => {
+                        popup.remove();
+                      });
+
+                      checkbox.addEventListener("change", () => {
+                        filterFeatures();
+                      });
+                    });
+
+                    // Rest of your existing code...
+
+                    // Define the getFeatureDescription function here
+                    function getFeatureDescription(featureType) {
+                      // Define and return descriptions for each feature type
+                      // You can use a switch statement, if-else, or an object to map feature types to descriptions
+                      // For example:
+                      switch (featureType) {
+                        case "Multi-Family":
+                          return "Multi-family, public, and afforable housing.";
+                        case "Schools":
+                          return "Preschools and kindergartens, middle schools, and high schools.";
+                        case "College/University":
+                          return "Colleges and universities.";
+                        case "Military":
+                          return "Military bases, facilities, and training centers.";
+                        case "Research Facility":
+                          return "Laboratories and other research facilities.";
+                        case "Water Treatment/Utility":
+                          return "Water treatment facilities and other utilities.";
+                        case "Commercial":
+                          return "Commercial facilities such as places of business or restaurants.";
+                        case "City/Community":
+                          return "Cities, communities, and other kinds of municipalities.";
+                        case "Public Institution":
+                          return "Public institutions like firehouses, police stations, and libraries.";
+                        case "Agriculture":
+                          return "Agricultural land like farms or processing facilities.";
+                        case "Hospitals/Healthcare":
+                          return "Hospitals and other healthcare facilities.";
+                        case "Airport":
+                          return "Airports and other aviation-related facilities.";
+                        case "Other":
+                          return "Other types of facilities.";
+                          // Add other cases here...
+                        default:
+                          return "Hover over a checkbox to see more information.";
+                      }
+                    }
+
+
+                    // When a click event occurs on a feature in the csvData layer, open a popup at the
+                    // location of the feature, with description HTML from its properties.
+                    map.on('click', 'csvData', function (e) {
+                      var coordinates = e.features[0].geometry.coordinates.slice();
+
+                      //set popup text
+                      //You can adjust the values of the popup to match the headers of your CSV.
+                      // For example: e.features[0].properties.Name is retrieving information from the field Name in the original CSV.
+
+                      // Get the 'TYPE' property from the feature's properties
+                      var type = String(e.features[0].properties.TYPE);
+
+                      // // Format the type string with first-letter-capitalization
+                      // title = function toTitleCase(type) {
+                      //   return type.toLowerCase().split(' ').map(function (word) {
+                      //     return (word.charAt(0).toUpperCase() + word.slice(1));
+                      //   }).join(' ');
+                      // };
+
+                      //fuel = title(type);
+
+                      var description =
+                        `<h3>` + e.features[0].properties.NAME + `</h3>` + '<hr />' +
+                        `\n<h4>` + `<b>` + `Application: ` + `</b>` + e.features[0].properties.TYPE +
+                        `</h4>` +
+                        `\n<h4>` + `<b>` + `Location: ` + `</b>` + e.features[0].properties.CITY + ', ' +
+                        e
+                        .features[0].properties.STATE + `</h4>` +
+                        `\n<h4>` + `<b>` + `Capacity: ` + `</b>` + e.features[0].properties.CAPTXT +
+                        `</h4>`
+                      // `\n<h4>` + `<b>` + `Capacity: ` + `</b>` + Number(parseFloat(e.features[0].properties
+                      //   .MW).toFixed(2)).toLocaleString('en', {
+                      //   minimumFractionDigits: 2
+                      // }) + ` MWs` + `</h4>` +
+                      // `\n<h4>` + `<b>` + `Annual CO2 Emissions: ` + `</b>` + Number(parseFloat(e.features[0]
+                      //   .properties.CARB).toFixed(2)).toLocaleString('en', {
+                      //   minimumFractionDigits: 2
+                      // }) + ` tons` + `</h4>`
+                      ;
+
+                      // Ensure that if the map is zoomed out such that multiple
+                      // copies of the feature are visible, the popup appears
+                      // over the copy being pointed to.
+                      while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+                        coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+                      }
+
+                      //add Popup to map
+
+                      new mapboxgl.Popup()
+                        .setLngLat(coordinates)
+                        .setHTML(description)
+                        .addTo(map);
+                    });
+
+                    // Change the cursor to a pointer when the mouse is over the places layer.
+                    map.on('mouseenter', 'csvData', function () {
+                      map.getCanvas().style.cursor = 'pointer';
+                    });
+
+                    // Change it back to a pointer when it leaves.
+                    map.on('mouseleave', 'places', function () {
+                      map.getCanvas().style.cursor = '';
+                    });
+
+                    var bbox = turf.bbox(geojson);
+                    map.fitBounds(bbox, {
+                      padding: 50
+                    });
+
+                  });
+
+                  fullscreen.addEventListener('click', toggleFullscreen)
+
+                  function toggleFullscreen() {
+                    let elem = document.getElementById("mapcontainer");
+                    if (!document.fullscreenElement) {
+                      elem.requestFullscreen().catch((err) => {
+                        alert(`Error attempting to enable fullscreen mode: ${err.message} (${err.name})`);
+                      });
+                    } else {
+                      document.exitFullscreen();
+                    }
+                  }
+                });
+              };
+            });
   </script>
 
 </body>
