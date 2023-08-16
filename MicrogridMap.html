@@ -74,16 +74,8 @@
     }
 
     .mapboxgl-popup-content::before {
-      content: "";
       position: absolute;
-      top: -20px;
-      /* Adjust this value to position the arrow correctly */
-      left: 50%;
-      /* Position the arrow in the middle horizontally */
-      transform: translateX(-50%);
-      border-width: 10px;
-      border-style: solid;
-      border-color: transparent transparent white transparent;
+      z-index: 1;
     }
   </style>
 
@@ -186,7 +178,7 @@
         lng: -130.664,
         lat: 51.258,
       }, // starting position [lng, lat]
-      zoom: 3.5, // starting zoom
+      zoom: 3.3, // starting zoom
       minZoom: 2.2,
       maxBounds: bounds,
       transformRequest: transformRequest
