@@ -436,31 +436,42 @@
               }
             });
 
-            const popupContainer = document.createElement("div");
-            popupContainer.className = "popup-container";
-            document.body.appendChild(popupContainer);
 
-            // Calculate the fixed position for the popup container
-            const popupFixedOffsetX = 300; // Adjust this value as needed
-            const popupFixedOffsetY = 100; // Adjust this value as needed
-            popupContainer.style.left = popupFixedOffsetX + "px";
-            popupContainer.style.top = popupFixedOffsetY + "px";
+
+            const menuItems = document.querySelectorAll(".menu-item");
+            const popup = new mapboxgl.Popup({
+              closeButton: false,
+              closeOnClick: false,
+            });
 
             menuItems.forEach(menuItem => {
               const checkbox = menuItem.querySelector("input[type=checkbox]");
 
               menuItem.addEventListener("mouseenter", () => {
                 const featureType = checkbox.value;
-                const featureDescription = getFeatureDescription(featureType);
+                const featureDescription = getFeatureDescription(
+                  featureType); // Define this function to get feature descriptions
 
                 if (featureDescription) {
-                  popupContainer.innerHTML = featureDescription;
-                  popupContainer.style.display = "block";
+                  const menuItemRect = menuItem.getBoundingClientRect();
+                  const menuItemCenterY = menuItemRect.top + menuItemRect.height / 2;
+
+                  const popupOffsetX = 0; // Adjust this value as needed
+                  const popupOffsetY = 0; // Adjust this value as needed
+
+                  const lngLat = map.unproject([
+                    menuItemRect.right + popupOffsetX,
+                    menuItemCenterY + popupOffsetY
+                  ]);
+
+                  popup.setLngLat(lngLat)
+                    .setHTML(featureDescription)
+                    .addTo(map);
                 }
               });
 
               menuItem.addEventListener("mouseleave", () => {
-                popupContainer.style.display = "none";
+                popup.remove();
               });
 
               checkbox.addEventListener("change", () => {
