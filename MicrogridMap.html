@@ -72,6 +72,19 @@
     #Other:checked {
       accent-color: #000000;
     }
+
+    .mapboxgl-popup-content::before {
+      content: "";
+      position: absolute;
+      top: -20px;
+      /* Adjust this value to position the arrow correctly */
+      left: 50%;
+      /* Position the arrow in the middle horizontally */
+      transform: translateX(-50%);
+      border-width: 10px;
+      border-style: solid;
+      border-color: transparent transparent white transparent;
+    }
   </style>
 
 </head>
