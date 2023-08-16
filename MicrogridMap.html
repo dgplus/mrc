@@ -23,6 +23,7 @@
     .mapboxgl-popup-content {
       white-space: nowrap;
       width: fit-content !important;
+      z-index: 1;
     }
 
     #Multi-Family:checked {
@@ -71,11 +72,6 @@
 
     #Other:checked {
       accent-color: #000000;
-    }
-
-    .mapboxgl-popup-content::before {
-      position: absolute;
-      z-index: 1;
     }
   </style>
 
