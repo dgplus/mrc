@@ -88,6 +88,7 @@
         <div class='menu'>
           <strong>Show/Hide Features</strong>
           <hr />
+          <button id="toggleAll">Toggle All</button>
           <label class='menu-item'>
             <input type='checkbox' id='Multi-Family' value='Multi-Family' checked />
             Multi-Family
@@ -178,6 +179,21 @@
       maxBounds: bounds,
       transformRequest: transformRequest
     });
+
+    // Add the event listener for the toggle button
+    const toggleButton = document.getElementById("toggleAll");
+    toggleButton.addEventListener("click", toggleAllCheckboxes);
+
+    function toggleAllCheckboxes() {
+      const checkboxes = document.querySelectorAll("input[type=checkbox]");
+      const isChecked = Array.from(checkboxes).every(checkbox => checkbox.checked);
+
+      checkboxes.forEach(checkbox => {
+        checkbox.checked = !isChecked;
+      });
+
+      filterFeatures(); // Update the displayed features after toggling
+    }
 
     const checkboxes = document.querySelectorAll("input[type=checkbox]");
     checkboxes.forEach(checkbox => {
@@ -428,7 +444,7 @@
               menuItem.addEventListener("mouseenter", () => {
                 const featureType = checkbox.value;
                 const featureDescription = getFeatureDescription(
-                featureType); // Define this function to get feature descriptions
+                  featureType); // Define this function to get feature descriptions
 
                 if (featureDescription) {
                   const menuItemRect = menuItem.getBoundingClientRect();
