@@ -224,7 +224,7 @@
 
         if (coordinatesMap[key]) {
           // Features with the same coordinates found, adjust their positions
-          const shift = 0.0001; // Adjust this value as needed
+          const shift = 0.5; // Adjust this value as needed
           coordinates[0] += shift;
           coordinates[1] += shift;
         }
