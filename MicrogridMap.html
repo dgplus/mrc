@@ -458,7 +458,7 @@
 
             const menuItems = document.querySelectorAll(".menu-item");
             const popup = document.getElementById("popup");
-            const mapOverlayInner = document.getElementById("map-overlay-inner");
+            const mapTop = document.getElementById("map-overlay.top");
             const popupContent = document.getElementById("popup-content");
 
             function updatePopupContent(featureType) {
@@ -475,7 +475,7 @@
                 const featureType = checkbox.value;
                 updatePopupContent(featureType);
 
-                const legendRect = mapOverlayInner.getBoundingClientRect();
+                const legendRect = mapTop.getBoundingClientRect();
                 const menuItemRect = menuItem.getBoundingClientRect();
                 const menuItemCenterY = menuItemRect.top + menuItemRect.height / 2;
 
