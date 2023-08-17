@@ -20,10 +20,6 @@
       padding-bottom: 0px;
     }
 
-    #legend {
-      z-index: 0;
-    }
-
     .mapboxgl-popup-content {
       white-space: nowrap;
       width: fit-content !important;
@@ -43,9 +39,8 @@
       overflow-y: auto;
       visibility: hidden;
       /* Initially hidden */
-      transition: right 0.3s ease-in-out;
+      transition: top 0.5s ease-in-out;
       text-wrap: balance;
-      z-index: 1;
     }
 
 
@@ -105,12 +100,11 @@
 
   <div id="mapcontainer">
     <div id="map"></div>
-    <div id="legend"></div>
     <div id="popup" class="map-overlay-popup">
       <div id="popup-content"></div>
     </div>
-    <div class="map-overlay top">
-      <div class="map-overlay-inner">
+    <div id="legend" class="map-overlay top">
+      <div id="legendInside" class="map-overlay-inner">
         <h3>Microgrid Installations<br> in the US</h3>
         <div class='menu'>
           <button id="toggleAll"><strong>Show/Hide Features</strong></button>
@@ -462,6 +456,7 @@
             const menuItems = document.querySelectorAll(".menu-item");
             const popup = document.getElementById("popup");
             const popupContent = document.getElementById("popup-content");
+            const legend = document.getElementById("legendInside");
 
             function updatePopupContent(featureType) {
               const featureDescription = getFeatureDescription(featureType);
@@ -477,17 +472,19 @@
                 const featureType = checkbox.value;
                 updatePopupContent(featureType);
 
-                const menuItemRect = menuItem.getBoundingClientRect();
-                const menuItemCenterY = menuItemRect.top + menuItemRect.height / 2;
+                const featureLegend = legend.getBoundingClientRect();
+                const legendTop = featureLegend.top;
+                const legendRight = featureLegend.right;
 
-                popup.style.top = `${menuItemCenterY}px`;
-                popup.style.right = "0"; // Show the popup
+                popup.style.top = `${legendTop}px`;
+                const legendRighter = legendRight + 10;
+                popup.style.left = `${legendRighter}px`; // Show the popup
                 popup.style.visibility = "visible";
               });
 
               menuItem.addEventListener("mouseleave", () => {
                 popup.style.visibility = "hidden";
-                popup.style.right = "-300px"; // Hide the popup
+                popup.style.top = "-300px"; // Hide the popup
               });
 
               // ... (existing code)
