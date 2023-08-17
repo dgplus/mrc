@@ -27,7 +27,21 @@
     .mapboxgl-popup-content {
       white-space: nowrap;
       width: fit-content !important;
-      z-index: 1;
+    }
+
+    .map-overlay-popup {
+      position: absolute;
+      top: 0;
+      right: -300px;
+      /* Position the popup outside the view initially */
+      width: 300px;
+      height: 100%;
+      background-color: white;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      overflow-y: auto;
+      visibility: hidden;
+      /* Initially hidden */
+      transition: right 0.3s ease-in-out;
     }
 
     #Multi-Family:checked {
@@ -87,6 +101,9 @@
   <div id="mapcontainer">
     <div id="map"></div>
     <div id="legend"></div>
+    <div id="popup" class="map-overlay-popup">
+      <div id="popup-content"></div>
+    </div>
     <div class="map-overlay top">
       <div class="map-overlay-inner">
         <h3>Microgrid Installations<br> in the US</h3>
@@ -436,47 +453,37 @@
               }
             });
 
+            const popup = document.getElementById("popup");
+            const popupContent = document.getElementById("popup-content");
 
-
-            const menuItems = document.querySelectorAll(".menu-item");
-            const popup = new mapboxgl.Popup({
-              closeButton: false,
-              closeOnClick: false,
-            });
+            function updatePopupContent(featureType) {
+              const featureDescription = getFeatureDescription(featureType);
+              if (featureDescription) {
+                popupContent.innerHTML = featureDescription;
+              }
+            }
 
             menuItems.forEach(menuItem => {
               const checkbox = menuItem.querySelector("input[type=checkbox]");
 
               menuItem.addEventListener("mouseenter", () => {
                 const featureType = checkbox.value;
-                const featureDescription = getFeatureDescription(
-                  featureType); // Define this function to get feature descriptions
+                updatePopupContent(featureType);
 
-                if (featureDescription) {
-                  const menuItemRect = menuItem.getBoundingClientRect();
-                  const menuItemCenterY = menuItemRect.top + menuItemRect.height / 2;
+                const menuItemRect = menuItem.getBoundingClientRect();
+                const menuItemCenterY = menuItemRect.top + menuItemRect.height / 2;
 
-                  const popupOffsetX = 0; // Adjust this value as needed
-                  const popupOffsetY = 0; // Adjust this value as needed
-
-                  const lngLat = map.unproject([
-                    menuItemRect.right + popupOffsetX,
-                    menuItemCenterY + popupOffsetY
-                  ]);
-
-                  popup.setLngLat(lngLat)
-                    .setHTML(featureDescription)
-                    .addTo(map);
-                }
+                popup.style.top = `${menuItemCenterY}px`;
+                popup.style.right = "0"; // Show the popup
+                popup.style.visibility = "visible";
               });
 
               menuItem.addEventListener("mouseleave", () => {
-                popup.remove();
+                popup.style.visibility = "hidden";
+                popup.style.right = "-300px"; // Hide the popup
               });
 
-              checkbox.addEventListener("change", () => {
-                filterFeatures();
-              });
+              // ... (existing code)
             });
 
             // Rest of your existing code...
