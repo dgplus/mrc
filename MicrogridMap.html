@@ -32,16 +32,17 @@
     /* Update the CSS to style the popup div at the top */
     .map-overlay-popup {
       position: absolute;
-      top: 50px;
-      /* Position the popup at the top of the screen */
-      left: 300px;
-      /* Adjust the left position to align with the filter menu */
+      top: 0;
+      right: -300px;
+      /* Position the popup outside the view initially */
       width: 300px;
+      height: 100%;
       background-color: white;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
       overflow-y: auto;
       visibility: hidden;
-      transition: top 0.3s ease-in-out, visibility 0.3s ease-in-out;
+      /* Initially hidden */
+      transition: right 0.3s ease-in-out;
     }
 
 
@@ -474,18 +475,19 @@
                 updatePopupContent(featureType);
 
                 const menuItemRect = menuItem.getBoundingClientRect();
-                const menuItemCenterX = menuItemRect.left + menuItemRect.width / 2;
+                const menuItemCenterY = menuItemRect.top + menuItemRect.height / 2;
 
-                popup.style.left = `${menuItemCenterX}px`; // Align popup with menu item
+                popup.style.top = `${menuItemCenterY}px`;
+                popup.style.right = "0"; // Show the popup
                 popup.style.visibility = "visible";
-                popup.style.top =
-                `${menuItemRect.top - popup.offsetHeight}px`; // Position at the top
               });
 
               menuItem.addEventListener("mouseleave", () => {
                 popup.style.visibility = "hidden";
-                popup.style.top = "50px"; // Reset the top position
+                popup.style.right = "-300px"; // Hide the popup
               });
+
+              // ... (existing code)
             });
 
             // Define the getFeatureDescription function here
