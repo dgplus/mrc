@@ -33,10 +33,10 @@
     .map-overlay-popup {
       position: relative;
       top: 0;
-      left: 22%;
+      left: 31%;
       right: 0px;
       /* Position the popup outside the view initially */
-      width: 300px;
+      width: 175px;
       height: auto;
       background-color: white;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -44,6 +44,8 @@
       visibility: hidden;
       /* Initially hidden */
       transition: right 0.3s ease-in-out;
+      text-wrap: balance;
+      z-index: 1;
     }
 
 
@@ -264,7 +266,7 @@
 
         if (coordinatesMap[key]) {
           // Features with the same coordinates found, adjust their positions
-          const shift = 1; // Adjust this value as needed
+          const shift = 0.01449275362; // Adjust this value as needed
           coordinates[0] += shift;
           coordinates[1] += shift;
         }
@@ -459,7 +461,6 @@
 
             const menuItems = document.querySelectorAll(".menu-item");
             const popup = document.getElementById("popup");
-            const mapTop = document.getElementById("map-overlay top");
             const popupContent = document.getElementById("popup-content");
 
             function updatePopupContent(featureType) {
@@ -476,18 +477,17 @@
                 const featureType = checkbox.value;
                 updatePopupContent(featureType);
 
-                const legendRect = mapTop.getBoundingClientRect();
                 const menuItemRect = menuItem.getBoundingClientRect();
                 const menuItemCenterY = menuItemRect.top + menuItemRect.height / 2;
 
-                popup.style.top = `${menuItemCenterY}0px`;
-                popup.style.left = `${legendRectX}30px`; // Show the popup
+                popup.style.top = `${menuItemCenterY}px`;
+                popup.style.right = "0"; // Show the popup
                 popup.style.visibility = "visible";
               });
 
               menuItem.addEventListener("mouseleave", () => {
                 popup.style.visibility = "hidden";
-                popup.style.top = "-300px"; // Hide the popup
+                popup.style.right = "-300px"; // Hide the popup
               });
 
               // ... (existing code)
